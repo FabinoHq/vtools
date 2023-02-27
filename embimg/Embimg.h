@@ -47,6 +47,10 @@
     #include "Images/PNGFile.h"
 
     #include <iostream>
+    #include <iomanip>
+    #include <string>
+    #include <sstream>
+    #include <fstream>
     #include <cstddef>
     #include <cstdint>
     #include <new>
@@ -73,13 +77,13 @@
             //  Launch Embimg                                                 //
             //  return : True if Embimg successfully started, false otherwise //
             ////////////////////////////////////////////////////////////////////
-            bool launch();
+            bool launch(const std::string& filepath);
 
             ////////////////////////////////////////////////////////////////////
             //  Run Embimg                                                    //
             //  return : True if Embimg successfully executed                 //
             ////////////////////////////////////////////////////////////////////
-            bool run();
+            bool run(const std::string& filepath);
 
 
         private:

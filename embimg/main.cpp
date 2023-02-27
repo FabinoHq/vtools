@@ -46,11 +46,17 @@
 //  Standard program entry point                                              //
 //  return : Main program return code                                         //
 ////////////////////////////////////////////////////////////////////////////////
-int main()
+int main(int argc, char* argv[])
 {
+    // Check arguments
+    if (argc < 2)
+    {
+        return 1;
+    }
+
     // Start Embimg
     Embimg embimg;
-    if (!embimg.launch())
+    if (!embimg.launch(argv[1]))
     {
         // Embimg error occured
         return 1;
