@@ -37,65 +37,38 @@
 //   For more information, please refer to <https://unlicense.org>            //
 ////////////////////////////////////////////////////////////////////////////////
 //    VTools : Virtual Tools                                                  //
-//     Embimg.h : Embedded Image main class management                        //
+//     System/System.h : VTools Embimg System management wrapper              //
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef VTOOLS_EMBIMG_EMBIMG_HEADER
-#define VTOOLS_EMBIMG_EMBIMG_HEADER
-
-    #include "System/System.h"
-    #include "System/SysCPU.h"
-    #include "Images/PNGFile.h"
-
-    #include <iostream>
-    #include <cstddef>
-    #include <cstdint>
-    #include <new>
+#ifndef VTOOLS_EMBIMG_SYSTEM_SYSTEM_HEADER
+#define VTOOLS_EMBIMG_SYSTEM_SYSTEM_HEADER
 
 
     ////////////////////////////////////////////////////////////////////////////
-    //  Embimg main class definition                                          //
+    //  Operating system configuration                                        //
     ////////////////////////////////////////////////////////////////////////////
-    class Embimg
-    {
-        public:
-            ////////////////////////////////////////////////////////////////////
-            //  Embimg default constructor                                    //
-            ////////////////////////////////////////////////////////////////////
-            Embimg();
+    #if defined(_WIN32) || defined(_WIN64) || defined(__MINGW32__)
+        #define VTOOLS_EMBIMG_WINDOWS
+    #endif // Windows
 
-            ////////////////////////////////////////////////////////////////////
-            //  Embimg destructor                                             //
-            ////////////////////////////////////////////////////////////////////
-            ~Embimg();
+    #if defined(__APPLE__)
+        #define VTOOLS_EMBIMG_MACOS
+    #endif // MacOS
 
-
-            ////////////////////////////////////////////////////////////////////
-            //  Launch Embimg                                                 //
-            //  return : True if Embimg successfully started, false otherwise //
-            ////////////////////////////////////////////////////////////////////
-            bool launch();
-
-            ////////////////////////////////////////////////////////////////////
-            //  Run Embimg                                                    //
-            //  return : True if Embimg successfully executed                 //
-            ////////////////////////////////////////////////////////////////////
-            bool run();
+    #if defined(__linux__)
+        #define VTOOLS_EMBIMG_LINUX
+    #endif // Linux
 
 
-        private:
-            ////////////////////////////////////////////////////////////////////
-            //  Embimg private copy constructor : Not copyable                //
-            ////////////////////////////////////////////////////////////////////
-            Embimg(const Embimg&) = delete;
-
-            ////////////////////////////////////////////////////////////////////
-            //  Embimg private copy operator : Not copyable                   //
-            ////////////////////////////////////////////////////////////////////
-            Embimg& operator=(const Embimg&) = delete;
-
-
-        private:
-    };
+    ////////////////////////////////////////////////////////////////////////////
+    //  64bits or 32bits configuration                                        //
+    ////////////////////////////////////////////////////////////////////////////
+    #if defined(__x86_64__) || defined(_WIN64) || defined(__LP64__) || \
+        defined(__ia64) || defined(_M_X64) || defined(_M_IA64) || \
+        defined(__aarch64__) || defined(__powerpc64__)
+        #define VTOOLS_EMBIMG_64BITS
+    #else
+        #define VTOOLS_EMBIMG_32BITS
+    #endif
 
 
-#endif // VTOOLS_EMBIMG_EMBIMG_HEADER
+#endif // VTOOLS_EMBIMG_SYSTEM_SYSTEM_HEADER

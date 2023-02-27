@@ -3,8 +3,49 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Embimg.cpp" />
+    <ClCompile Include="System\SysCPU.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Compress\ZLib.cpp">
+      <Filter>Compress</Filter>
+    </ClCompile>
+    <ClCompile Include="Images\PNGFile.cpp">
+      <Filter>Images</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Embimg.h" />
+    <ClInclude Include="System\SysCPU.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SysCRC.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\System.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Win\SysCPU.h">
+      <Filter>System\Win</Filter>
+    </ClInclude>
+    <ClInclude Include="Compress\ZLib.h">
+      <Filter>Compress</Filter>
+    </ClInclude>
+    <ClInclude Include="Images\PNGFile.h">
+      <Filter>Images</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="System">
+      <UniqueIdentifier>{c61086bd-18a1-4bc0-8dec-295d908f0bbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Win">
+      <UniqueIdentifier>{dcd3678c-8647-45b2-b7d5-0e81c10eaadf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Compress">
+      <UniqueIdentifier>{45cef0f9-c9eb-4a3e-9c94-4069cf6788be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Images">
+      <UniqueIdentifier>{690f2cf5-efc8-4855-9e7f-844973794512}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

@@ -127,11 +127,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Compress\ZLib.cpp" />
     <ClCompile Include="Embimg.cpp" />
+    <ClCompile Include="Images\PNGFile.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="System\SysCPU.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Compress\ZLib.h" />
     <ClInclude Include="Embimg.h" />
+    <ClInclude Include="Images\PNGFile.h" />
+    <ClInclude Include="System\SysCPU.h" />
+    <ClInclude Include="System\SysCRC.h" />
+    <ClInclude Include="System\System.h" />
+    <ClInclude Include="System\Win\SysCPU.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

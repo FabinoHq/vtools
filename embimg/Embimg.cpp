@@ -65,8 +65,15 @@ Embimg::~Embimg()
 ////////////////////////////////////////////////////////////////////////////////
 bool Embimg::launch()
 {
-	// Run Embimg
-	return run();
+    // Check system CPU
+    if (!SysCPUCheck())
+    {
+        // Invalid system CPU
+        return false;
+    }
+
+    // Run Embimg
+    return run();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,6 +82,6 @@ bool Embimg::launch()
 ////////////////////////////////////////////////////////////////////////////////
 bool Embimg::run()
 {
-	// Embimg successfully executed
-	return true;
+    // Embimg successfully executed
+    return true;
 }

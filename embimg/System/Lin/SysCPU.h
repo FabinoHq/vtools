@@ -37,65 +37,59 @@
 //   For more information, please refer to <https://unlicense.org>            //
 ////////////////////////////////////////////////////////////////////////////////
 //    VTools : Virtual Tools                                                  //
-//     Embimg.h : Embedded Image main class management                        //
+//     System/Lin/SysCPU.h : System CPU management for Linux                  //
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef VTOOLS_EMBIMG_EMBIMG_HEADER
-#define VTOOLS_EMBIMG_EMBIMG_HEADER
+#ifndef VTOOLS_EMBIMG_SYSTEM_LIN_SYSCPU_HEADER
+#define VTOOLS_EMBIMG_SYSTEM_LIN_SYSCPU_HEADER
 
-    #include "System/System.h"
-    #include "System/SysCPU.h"
-    #include "Images/PNGFile.h"
+    #include "../System.h"
 
-    #include <iostream>
     #include <cstddef>
     #include <cstdint>
-    #include <new>
 
 
     ////////////////////////////////////////////////////////////////////////////
-    //  Embimg main class definition                                          //
+    //  Swap 2 bytes unsigned integer endianness                              //
+    //  return : Swapped 2 bytes unsigned integer                             //
     ////////////////////////////////////////////////////////////////////////////
-    class Embimg
-    {
-        public:
-            ////////////////////////////////////////////////////////////////////
-            //  Embimg default constructor                                    //
-            ////////////////////////////////////////////////////////////////////
-            Embimg();
+    #define SysByteSwap16 __builtin_bswap16
 
-            ////////////////////////////////////////////////////////////////////
-            //  Embimg destructor                                             //
-            ////////////////////////////////////////////////////////////////////
-            ~Embimg();
+    ////////////////////////////////////////////////////////////////////////////
+    //  Swap 4 bytes unsigned integer endianness                              //
+    //  return : Swapped 4 bytes unsigned integer                             //
+    ////////////////////////////////////////////////////////////////////////////
+    #define SysByteSwap32 __builtin_bswap32
 
-
-            ////////////////////////////////////////////////////////////////////
-            //  Launch Embimg                                                 //
-            //  return : True if Embimg successfully started, false otherwise //
-            ////////////////////////////////////////////////////////////////////
-            bool launch();
-
-            ////////////////////////////////////////////////////////////////////
-            //  Run Embimg                                                    //
-            //  return : True if Embimg successfully executed                 //
-            ////////////////////////////////////////////////////////////////////
-            bool run();
+    ////////////////////////////////////////////////////////////////////////////
+    //  Swap 8 bytes unsigned integer endianness                              //
+    //  return : Swapped 8 bytes unsigned integer                             //
+    ////////////////////////////////////////////////////////////////////////////
+    #define SysByteSwap64 __builtin_bswap64
 
 
-        private:
-            ////////////////////////////////////////////////////////////////////
-            //  Embimg private copy constructor : Not copyable                //
-            ////////////////////////////////////////////////////////////////////
-            Embimg(const Embimg&) = delete;
+    ////////////////////////////////////////////////////////////////////////////
+    //  Compute 32 bits scan forward                                          //
+    //  return : Computed 32 bits scan forward                                //
+    ////////////////////////////////////////////////////////////////////////////
+    #define SysBitScanForward32(bits) (__builtin_ctz(bits))
 
-            ////////////////////////////////////////////////////////////////////
-            //  Embimg private copy operator : Not copyable                   //
-            ////////////////////////////////////////////////////////////////////
-            Embimg& operator=(const Embimg&) = delete;
+    ////////////////////////////////////////////////////////////////////////////
+    //  Compute 32 bits scan reverse                                          //
+    //  return : Computed 32 bits scan reverse                                //
+    ////////////////////////////////////////////////////////////////////////////
+    #define SysBitScanReverse32(bits) (0x1F - __builtin_clz(bits))
+
+    ////////////////////////////////////////////////////////////////////////////
+    //  Compute 64 bits scan forward                                          //
+    //  return : Computed 64 bits scan forward                                //
+    ////////////////////////////////////////////////////////////////////////////
+    #define SysBitScanForward64(bits) (__builtin_ctzll(bits))
+
+    ////////////////////////////////////////////////////////////////////////////
+    //  Compute 64 bits scan reverse                                          //
+    //  return : Computed 64 bits scan reverse                                //
+    ////////////////////////////////////////////////////////////////////////////
+    #define SysBitScanReverse64(bits) (0x3F - __builtin_clzll(bits))
 
 
-        private:
-    };
-
-
-#endif // VTOOLS_EMBIMG_EMBIMG_HEADER
+#endif // VTOOLS_EMBIMG_SYSTEM_LIN_SYSCPU_HEADER
