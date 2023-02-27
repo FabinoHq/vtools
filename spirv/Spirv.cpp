@@ -124,6 +124,9 @@ bool Spirv::single(const std::string& folder, const std::string& filepath)
         input.read(&bytes[0], end - begin);
         input.close();
 
+        // Delete spv file
+        remove(inputpath.c_str());
+
         // Set spirv compiler byte
         if (bytes.size() >= 8)
         {
@@ -360,6 +363,9 @@ bool Spirv::multi(const std::string& folder)
             inputFShader.read(&bytes[0], end - begin);
             inputFShader.close();
 
+            // Delete spv file
+            remove(fReadStr.c_str());
+
             // Set spirv compiler byte
             if (bytes.size() >= 8)
             {
@@ -504,6 +510,9 @@ bool Spirv::multi(const std::string& folder)
             inputVShader.read(&bytes[0], end - begin);
             inputVShader.close();
 
+            // Delete spv file
+            remove(vReadStr.c_str());
+
             // Set spirv compiler byte
             if (bytes.size() >= 8)
             {
@@ -585,11 +594,11 @@ bool Spirv::multi(const std::string& folder)
                 inputFolder + fragmentShader
             );
             system(compileStr.c_str());
-            vReadStr = (inputFolder + fragmentShader + ".spv");
+            std::string fReadStr = (inputFolder + fragmentShader + ".spv");
 
             // Open input fragment shader
             std::ifstream inputFShader;
-            inputFShader.open(vReadStr, std::ios::in | std::ios::binary);
+            inputFShader.open(fReadStr, std::ios::in | std::ios::binary);
             if (!inputFShader.is_open())
             {
                 // Could not open input fragment shader
@@ -611,6 +620,9 @@ bool Spirv::multi(const std::string& folder)
             inputFShader.seekg(0, std::ios::beg);
             inputFShader.read(&bytes2[0], end - begin);
             inputFShader.close();
+
+            // Delete spv file
+            remove(fReadStr.c_str());
 
             // Set spirv compiler byte
             if (bytes2.size() >= 8)

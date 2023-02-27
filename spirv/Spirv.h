@@ -49,6 +49,7 @@
     #include <fstream>
     #include <cstddef>
     #include <cstdint>
+    #include <cstdio>
     #include <vector>
     #include <new>
 
