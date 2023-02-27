@@ -124,7 +124,7 @@ bool Embimg::run(const std::string& filepath)
 
     // Open output file
     std::ofstream output;
-    output.open(filename.c_str(), std::ios::out | std::ios::trunc);
+    output.open(filename, std::ios::out | std::ios::trunc);
     if (output.is_open())
     {
         // Write .h protection

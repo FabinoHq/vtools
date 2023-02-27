@@ -49,7 +49,122 @@
     #include <fstream>
     #include <cstddef>
     #include <cstdint>
+    #include <vector>
     #include <new>
+
+    #include <conio.h>
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    //  VTools spirv strings constants                                        //
+    ////////////////////////////////////////////////////////////////////////////
+    const std::string VToolsSpirvVosHeader =
+        "///////////////////////////////////////"
+        "/////////////////////////////////////////\n"
+        "//     _______                       __"
+        "__________________________________     //\n"
+        "//     \\\\ .   \\            _________/ ."
+        " . . . . . . . . . . . . . . .   /     //\n"
+        "//      \\\\ .   \\       ___/ . . . . .  "
+        "  ______________________________/      //\n"
+        "//       \\\\ .   \\   __/. . .   ________"
+        "_/     /    // .  __________/          //\n"
+        "//        \\\\ .   \\_//      ___/ .  ____"
+        "_     /    // .  /______               //\n"
+        "//         \\\\ .   \\/     _/ // .  /    "
+        "\\\\    |    \\\\  .        \\              //\n"
+        "//          \\\\ .        /   || .  |    "
+        "||    |     \\\\______     \\             //\n"
+        "//           \\\\ .      /    || .  \\____"
+        "//    |  _________//     /             //\n"
+        "//            \\\\ .    /     //  .      "
+        "      / // . . . .      /              //\n"
+        "//             \\\\____/     //__________"
+        "_____/ //______________/               //\n"
+        "//                                     "
+        "                                       //\n"
+        "///////////////////////////////////////"
+        "/////////////////////////////////////////\n"
+        "//   This is free and unencumbered soft"
+        "ware released into the public domain.  //\n"
+        "//                                     "
+        "                                       //\n"
+        "//   Anyone is free to copy, modify, pu"
+        "blish, use, compile, sell, or          //\n"
+        "//   distribute this software, either i"
+        "n source code form or as a compiled    //\n"
+        "//   binary, for any purpose, commercia"
+        "l or non-commercial, and by any        //\n"
+        "//   means.                            "
+        "                                       //\n"
+        "//                                     "
+        "                                       //\n"
+        "//   In jurisdictions that recognize co"
+        "pyright laws, the author or authors    //\n"
+        "//   of this software dedicate any and "
+        "all copyright interest in the          //\n"
+        "//   software to the public domain. We "
+        "make this dedication for the benefit   //\n"
+        "//   of the public at large and to the "
+        "detriment of our heirs and             //\n"
+        "//   successors. We intend this dedicat"
+        "ion to be an overt act of              //\n"
+        "//   relinquishment in perpetuity of al"
+        "l present and future rights to this    //\n"
+        "//   software under copyright law.     "
+        "                                       //\n"
+        "//                                     "
+        "                                       //\n"
+        "//   THE SOFTWARE IS PROVIDED \"AS IS\", "
+        "WITHOUT WARRANTY OF ANY KIND,          //\n"
+        "//   EXPRESS OR IMPLIED, INCLUDING BUT "
+        "NOT LIMITED TO THE WARRANTIES OF       //\n"
+        "//   MERCHANTABILITY, FITNESS FOR A PAR"
+        "TICULAR PURPOSE AND NONINFRINGEMENT.   //\n"
+        "//   IN NO EVENT SHALL THE AUTHORS BE L"
+        "IABLE FOR ANY CLAIM, DAMAGES OR        //\n"
+        "//   OTHER LIABILITY, WHETHER IN AN ACT"
+        "ION OF CONTRACT, TORT OR OTHERWISE,    //\n"
+        "//   ARISING FROM, OUT OF OR IN CONNECT"
+        "ION WITH THE SOFTWARE OR THE USE OR    //\n"
+        "//   OTHER DEALINGS IN THE SOFTWARE.   "
+        "                                       //\n"
+        "//                                     "
+        "                                       //\n"
+        "//   For more information, please refer"
+        " to <https://unlicense.org>            //\n"
+        "///////////////////////////////////////"
+        "/////////////////////////////////////////\n"
+        "//    VOS : Virtual Operating System   "
+        "                                       //\n";
+
+    const std::string VToolsSpirvCommentLine =
+        "///////////////////////////////////////"
+        "/////////////////////////////////////////\n";
+
+    const std::string VToolsSpirvIncludeLine =
+        "\n"
+        "    #include \"../../System/System.h\"\n"
+        "\n"
+        "    #include <cstddef>\n"
+        "    #include <cstdint>\n"
+        "\n";
+
+    const std::string VToolsSpirvTabCommentLine =
+        "    ///////////////////////////////////"
+        "/////////////////////////////////////////\n";
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    //  VTools spirv configuration file                                       //
+    ////////////////////////////////////////////////////////////////////////////
+    const std::string VToolsSpirvConfigFile = "spirv.txt";
+
+    ////////////////////////////////////////////////////////////////////////////
+    //  VTools spirv compile batch file                                       //
+    ////////////////////////////////////////////////////////////////////////////
+    const std::string VToolsSpirvCompileBatch =
+        "D:\\Dev\\GitHub\\vtools\\spirv\\compilerun.bat ";
 
 
     ////////////////////////////////////////////////////////////////////////////

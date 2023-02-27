@@ -65,6 +65,127 @@ Spirv::~Spirv()
 ////////////////////////////////////////////////////////////////////////////////
 bool Spirv::single(const std::string& filepath)
 {
+    // Check shader file
+    std::ifstream shaderfile;
+    shaderfile.open(filepath, std::ios::in | std::ios::binary);
+    if (!shaderfile.is_open())
+    {
+        return false;
+    }
+    shaderfile.close();
+
+    // Compile shader
+    std::string compileStr = (VToolsSpirvCompileBatch + filepath);
+    system(compileStr.c_str());
+    std::string inputpath = (filepath + ".spv");
+    std::string outputpath = (inputpath + ".h");
+
+    // Open input shader file
+    std::ifstream input;
+    input.open(inputpath, std::ios::in | std::ios::binary);
+    if (input.is_open())
+    {
+        // Get input shader size
+        std::streampos begin, end;
+        begin = input.tellg();
+        input.seekg(0, std::ios::end);
+        end = input.tellg();
+
+        // Read input shader bytes
+        std::vector<char> bytes(static_cast<size_t>(end - begin));
+        input.seekg(0, std::ios::beg);
+        input.read(&bytes[0], end - begin);
+        input.close();
+
+        // Set spirv compiler byte
+        if (bytes.size() >= 8)
+        {
+            bytes[8] = 0;
+        }
+
+        // Convert bytes to uint32_t
+        uint32_t* uints = reinterpret_cast<uint32_t*>(bytes.data());
+
+        // Open output file
+        std::ofstream output;
+        output.open(outputpath, std::ios::out | std::ios::trunc);
+        if (output.is_open())
+        {
+            // Write header
+            output << "#ifndef SHADERS_SHADER_HEADER\n";
+            output << "#define SHADERS_SHADER_HEADER\n\n\n";
+
+            // Write shader description
+            output << "    ////////////////////////////////////";
+            output << "////////////////////////////////////////\n";
+            output << "    //  Shader                          ";
+            output << "                                      //\n";
+            output << "    ////////////////////////////////////";
+            output << "////////////////////////////////////////\n";
+
+            // Write shader size
+            output << "    const size_t ShaderTypeShader" <<
+                "Size = " << bytes.size() << ";\n";
+
+            output << "    const uint32_t ShaderTypeShader" <<
+                "[] =\n    {\n";
+
+            // Write hexadecimal data
+            for (size_t i = 0; i < bytes.size() / 4; ++i)
+            {
+                // Convert data to hexadecimal string
+                std::ostringstream oss;
+                oss << std::hex << std::setfill('0') <<
+                    std::setw(8) << uints[i] << std::dec;
+                std::string outStr = oss.str();
+
+                // Uppercase hexadecimal
+                for (size_t j = 0; j < outStr.size(); ++j)
+                {
+                    if (outStr[j] == 'a') { outStr[j] = 'A'; }
+                    if (outStr[j] == 'b') { outStr[j] = 'B'; }
+                    if (outStr[j] == 'c') { outStr[j] = 'C'; }
+                    if (outStr[j] == 'd') { outStr[j] = 'D'; }
+                    if (outStr[j] == 'e') { outStr[j] = 'E'; }
+                    if (outStr[j] == 'f') { outStr[j] = 'F'; }
+                }
+
+                // Write tab each 4 hexadecimal data
+                if ((i) % 4 == 0)
+                {
+                    output << "        ";
+                }
+
+                // Write hexadecimal string
+                output << "0x" << outStr;
+                if ((i+1) >= (bytes.size() / 4))
+                {
+                    // Last hexadecimal data
+                    output << "u\n    };\n\n";
+                }
+                else
+                {
+                    // New line every 4 hexadecimal data
+                    if ((i+1) % 4 == 0)
+                    {
+                        output << "u,\n";
+                    }
+                    else
+                    {
+                        output << "u, ";
+                    }
+                }
+            }
+
+            // Close output file
+            output << "\n#endif // SHADERS_SHADER_HEADER\n";
+            output.close();
+        }
+
+        // Close input shader file
+        input.close();
+    }
+
     // Spirv single successfully executed
     return true;
 }
