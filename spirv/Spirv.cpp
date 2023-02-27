@@ -63,8 +63,33 @@ Spirv::~Spirv()
 //  Launch Spirv single                                                       //
 //  return : True if Spirv successfully executed, false otherwise             //
 ////////////////////////////////////////////////////////////////////////////////
-bool Spirv::single(const std::string& filepath)
+bool Spirv::single(const std::string& folder, const std::string& filepath)
 {
+    // Set root folder
+    std::string rootfolder = "";
+    size_t rootpathlen = 0;
+    bool rootpathfound = false;
+    for (size_t i = folder.length()-1; i > 0; --i)
+    {
+        if (folder[i] == '/' || folder[i] == '\\')
+        {
+            rootpathfound = true;
+            break;
+        }
+        ++rootpathlen;
+    }
+    if (rootpathfound)
+    {
+        for (size_t i = 0; i < (folder.length()-rootpathlen); ++i)
+        {
+            rootfolder += folder[i];
+        }
+    }
+    if (rootfolder.empty())
+    {
+        rootfolder = "";
+    }
+
     // Check shader file
     std::ifstream shaderfile;
     shaderfile.open(filepath, std::ios::in | std::ios::binary);
@@ -75,7 +100,9 @@ bool Spirv::single(const std::string& filepath)
     shaderfile.close();
 
     // Compile shader
-    std::string compileStr = (VToolsSpirvCompileBatch + filepath);
+    std::string compileStr = (
+        rootfolder + VToolsSpirvCompileBatch + " " + filepath
+    );
     system(compileStr.c_str());
     std::string inputpath = (filepath + ".spv");
     std::string outputpath = (inputpath + ".h");
@@ -194,8 +221,33 @@ bool Spirv::single(const std::string& filepath)
 //  Launch Spirv multi                                                        //
 //  return : True if Spirv successfully executed, false otherwise             //
 ////////////////////////////////////////////////////////////////////////////////
-bool Spirv::multi()
+bool Spirv::multi(const std::string& folder)
 {
+    // Set root folder
+    std::string rootfolder = "";
+    size_t rootpathlen = 0;
+    bool rootpathfound = false;
+    for (size_t i = folder.length()-1; i > 0; --i)
+    {
+        if (folder[i] == '/' || folder[i] == '\\')
+        {
+            rootpathfound = true;
+            break;
+        }
+        ++rootpathlen;
+    }
+    if (rootpathfound)
+    {
+        for (size_t i = 0; i < (folder.length()-rootpathlen); ++i)
+        {
+            rootfolder += folder[i];
+        }
+    }
+    if (rootfolder.empty())
+    {
+        rootfolder = "";
+    }
+
     // Input settings
     std::string token = "";
     std::string inputFolder = "";
@@ -204,7 +256,7 @@ bool Spirv::multi()
 
     // Open input settings
     std::ifstream spirvinput;
-    spirvinput.open(VToolsSpirvConfigFile, std::ios::in);
+    spirvinput.open((rootfolder + VToolsSpirvConfigFile), std::ios::in);
     if (!spirvinput.is_open())
     {
         // Could not open input settings
@@ -247,7 +299,7 @@ bool Spirv::multi()
             // Open output file
             std::ofstream output;
             output.open(
-                outputFolder + outputName, std::ios::out | std::ios::trunc
+                (outputFolder + outputName), std::ios::out | std::ios::trunc
             );
             if (!output.is_open())
             {
@@ -271,7 +323,7 @@ bool Spirv::multi()
             // Check fragment shader file
             std::ifstream fFile;
             fFile.open(
-                inputFolder + fragmentShader, std::ios::in | std::ios::binary
+                (inputFolder + fragmentShader), std::ios::in | std::ios::binary
             );
             if (!fFile.is_open())
             {
@@ -281,7 +333,8 @@ bool Spirv::multi()
 
             // Compile fragment shader
             std::string compileStr = (
-                VToolsSpirvCompileBatch + inputFolder + fragmentShader
+                rootfolder + VToolsSpirvCompileBatch + " " +
+                inputFolder + fragmentShader
             );
             system(compileStr.c_str());
             std::string fReadStr = (inputFolder + fragmentShader + ".spv");
@@ -390,7 +443,7 @@ bool Spirv::multi()
             // Open output file
             std::ofstream output;
             output.open(
-                outputFolder + outputName, std::ios::out | std::ios::trunc
+                (outputFolder + outputName), std::ios::out | std::ios::trunc
             );
             if (!output.is_open())
             {
@@ -414,7 +467,7 @@ bool Spirv::multi()
             // Check vertex shader file
             std::ifstream vFile;
             vFile.open(
-                inputFolder + vertexShader, std::ios::in | std::ios::binary
+                (inputFolder + vertexShader), std::ios::in | std::ios::binary
             );
             if (!vFile.is_open())
             {
@@ -424,7 +477,8 @@ bool Spirv::multi()
 
             // Compile vertex shader
             std::string compileStr = (
-                VToolsSpirvCompileBatch + inputFolder + vertexShader
+                rootfolder + VToolsSpirvCompileBatch + " " +
+                inputFolder + vertexShader
             );
             system(compileStr.c_str());
             std::string vReadStr = (inputFolder + vertexShader + ".spv");
@@ -517,7 +571,7 @@ bool Spirv::multi()
             // Check fragment shader file
             std::ifstream fFile;
             fFile.open(
-                inputFolder + vertexShader, std::ios::in | std::ios::binary
+                (inputFolder + vertexShader), std::ios::in | std::ios::binary
             );
             if (!fFile.is_open())
             {
@@ -527,7 +581,8 @@ bool Spirv::multi()
 
             // Compile fragment shader
             compileStr = (
-                VToolsSpirvCompileBatch + inputFolder + fragmentShader
+                rootfolder + VToolsSpirvCompileBatch + " " +
+                inputFolder + fragmentShader
             );
             system(compileStr.c_str());
             vReadStr = (inputFolder + fragmentShader + ".spv");

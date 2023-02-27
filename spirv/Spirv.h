@@ -161,8 +161,7 @@
     ////////////////////////////////////////////////////////////////////////////
     //  VTools spirv compile batch file                                       //
     ////////////////////////////////////////////////////////////////////////////
-    const std::string VToolsSpirvCompileBatch =
-        "D:\\Dev\\GitHub\\vtools\\spirv\\compilerun.bat ";
+    const std::string VToolsSpirvCompileBatch = "compile.bat";
 
 
     ////////////////////////////////////////////////////////////////////////////
@@ -186,13 +185,13 @@
             //  Launch Spirv single                                           //
             //  return : True if Spirv successfully executed, false otherwise //
             ////////////////////////////////////////////////////////////////////
-            bool single(const std::string& filepath);
+            bool single(const std::string& folder, const std::string& filepath);
 
             ////////////////////////////////////////////////////////////////////
             //  Launch Spirv multi                                            //
             //  return : True if Spirv successfully executed, false otherwise //
             ////////////////////////////////////////////////////////////////////
-            bool multi();
+            bool multi(const std::string& folder);
 
 
         private:

@@ -48,12 +48,18 @@
 ////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char* argv[])
 {
+    // Check arguments
+    if (argc < 1)
+    {
+        return 1;
+    }
+
     // Start Spirv
     Spirv spirv;
     if (argc >= 2)
     {
         // Start spirv single
-        if (!spirv.single(argv[1]))
+        if (!spirv.single(argv[0], argv[1]))
         {
             // Spirv error occured
             return 1;
@@ -62,7 +68,7 @@ int main(int argc, char* argv[])
     else
     {
         // Start spirv multi
-        if (!spirv.multi())
+        if (!spirv.multi(argv[0]))
         {
             // Spirv error occured
             return 1;
