@@ -52,8 +52,6 @@
     #include <vector>
     #include <new>
 
-    #include <conio.h>
-
 
     ////////////////////////////////////////////////////////////////////////////
     //  VTools spirv strings constants                                        //
