@@ -1,0 +1,122 @@
+D:\Dev\GitHub\vos\Renderer\Shaders\Sources\
+D:\Dev\GitHub\vos\Renderer\Shaders\
+14
+2
+Default.vert
+Default.frag
+Default.h
+//     Renderer/Shaders/Default.h : Default shader                            //
+VOS_RENDERER_SHADERS_DEFAULT_HEADER
+    //  Default vertex shader                                                 //
+    //  Default fragment shader                                               //
+DefaultVertexShader
+DefaultFragmentShader
+1
+DefaultProc.frag
+DefaultProc.h
+//     Renderer/Shaders/DefaultProc.h : Default procedural shader             //
+VOS_RENDERER_SHADERS_DEFAULTPROC_HEADER
+    //  Default procedural fragment shader                                    //
+DefaultProcFragmentShader
+1
+Ellipse.frag
+Ellipse.h
+//     Renderer/Shaders/Ellipse.h : Ellipse shape shader                      //
+VOS_RENDERER_SHADERS_ELLIPSE_HEADER
+    //  Ellipse fragment shader                                               //
+EllipseFragmentShader
+2
+HeightMap.vert
+HeightMap.frag
+HeightMap.h
+//     Renderer/Shaders/HeightMap.h : Heightmap shader                        //
+VOS_RENDERER_SHADERS_HEIGHTMAP_HEADER
+    //  HeightMap vertex shader                                               //
+    //  HeightMap fragment shader                                             //
+HeightMapVertexShader
+HeightMapFragmentShader
+2
+HeightFar.vert
+HeightFar.frag
+HeightFar.h
+//     Renderer/Shaders/HeightFar.h : Heightfar shader                        //
+VOS_RENDERER_SHADERS_HEIGHTFAR_HEADER
+    //  HeightFar vertex shader                                               //
+    //  HeightFar fragment shader                                             //
+HeightFarVertexShader
+HeightFarFragmentShader
+2
+SeaNear.vert
+SeaNear.frag
+SeaNear.h
+//     Renderer/Shaders/SeaNear.h : SeaNear shader                            //
+VOS_RENDERER_SHADERS_SEANEAR_HEADER
+    //  SeaNear vertex shader                                                 //
+    //  SeaNear fragment shader                                               //
+SeaNearVertexShader
+SeaNearFragmentShader
+2
+SeaFar.vert
+SeaFar.frag
+SeaFar.h
+//     Renderer/Shaders/SeaFar.h : SeaFar shader                              //
+VOS_RENDERER_SHADERS_SEAFAR_HEADER
+    //  SeaFar vertex shader                                                  //
+    //  SeaFar fragment shader                                                //
+SeaFarVertexShader
+SeaFarFragmentShader
+1
+NinePatch.frag
+NinePatch.h
+//     Renderer/Shaders/NinePatch.h : NinePatch shader                        //
+VOS_RENDERER_SHADERS_NINEPATCH_HEADER
+    //  NinePatch fragment shader                                             //
+NinePatchFragmentShader
+1
+PxText.frag
+PxText.h
+//     Renderer/Shaders/PxText.h : GUI PixelText (distance field) shader      //
+VOS_RENDERER_SHADERS_PXTEXT_HEADER
+    //  Pixel text fragment shader                                            //
+PxTextFragmentShader
+1
+Rectangle.frag
+Rectangle.h
+//     Renderer/Shaders/Rectangle.h : Rectangle shape shader                  //
+VOS_RENDERER_SHADERS_RECTANGLE_HEADER
+    //  Rectangle fragment shader                                             //
+RectangleFragmentShader
+2
+SkyBox.vert
+SkyBox.frag
+SkyBox.h
+//     Renderer/Shaders/SkyBox.h : SkyBox shader                              //
+VOS_RENDERER_SHADERS_SKYBOX_HEADER
+    //  SkyBox vertex shader                                                  //
+    //  SkyBox fragment shader                                                //
+SkyBoxVertexShader
+SkyBoxFragmentShader
+1
+SkyProc.frag
+SkyProc.h
+//     Renderer/Shaders/SkyProc.h : Procedural skybox shader                  //
+VOS_RENDERER_SHADERS_SKYPROC_HEADER
+    //  Procedural skybox fragment shader                                     //
+SkyProcFragmentShader
+2
+StaticMesh.vert
+StaticMesh.frag
+StaticMesh.h
+//     Renderer/Shaders/StaticMesh.h : Static mesh shader                     //
+VOS_RENDERER_SHADERS_STATICMESH_HEADER
+    //  Static mesh vertex shader                                             //
+    //  Static mesh fragment shader                                           //
+StaticMeshVertexShader
+StaticMeshFragmentShader
+1
+StaticProc.frag
+StaticProc.h
+//     Renderer/Shaders/StaticProc.h : Static mesh procedural shader          //
+VOS_RENDERER_SHADERS_STATICPROC_HEADER
+    //  Static mesh procedural fragment shader                                //
+StaticProcFragmentShader
