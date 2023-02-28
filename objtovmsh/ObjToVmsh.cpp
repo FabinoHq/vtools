@@ -37,38 +37,44 @@
 //   For more information, please refer to <https://unlicense.org>            //
 ////////////////////////////////////////////////////////////////////////////////
 //    VTools : Virtual Tools                                                  //
-//     System/System.h : VTools Embimg System management wrapper              //
+//     ObjToVmsh.cpp : ObjToVmsh main class management                        //
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef VTOOLS_EMBIMG_SYSTEM_SYSTEM_HEADER
-#define VTOOLS_EMBIMG_SYSTEM_SYSTEM_HEADER
+#include "ObjToVmsh.h"
 
 
-    ////////////////////////////////////////////////////////////////////////////
-    //  Operating system configuration                                        //
-    ////////////////////////////////////////////////////////////////////////////
-    #if defined(_WIN32) || defined(_WIN64) || defined(__MINGW32__)
-        #define VTOOLS_EMBIMG_WINDOWS
-    #endif // Windows
+////////////////////////////////////////////////////////////////////////////////
+//  ObjToVmsh default constructor                                             //
+////////////////////////////////////////////////////////////////////////////////
+ObjToVmsh::ObjToVmsh()
+{
 
-    #if defined(__APPLE__)
-        #define VTOOLS_EMBIMG_MACOS
-    #endif // MacOS
+}
 
-    #if defined(__linux__)
-        #define VTOOLS_EMBIMG_LINUX
-    #endif // Linux
+////////////////////////////////////////////////////////////////////////////////
+//  ObjToVmsh destructor                                                      //
+////////////////////////////////////////////////////////////////////////////////
+ObjToVmsh::~ObjToVmsh()
+{
 
-
-    ////////////////////////////////////////////////////////////////////////////
-    //  64bits or 32bits configuration                                        //
-    ////////////////////////////////////////////////////////////////////////////
-    #if defined(__x86_64__) || defined(_WIN64) || defined(__LP64__) || \
-        defined(__ia64) || defined(_M_X64) || defined(_M_IA64) || \
-        defined(__aarch64__) || defined(__powerpc64__)
-        #define VTOOLS_EMBIMG_64BITS
-    #else
-        #define VTOOLS_EMBIMG_32BITS
-    #endif
+}
 
 
-#endif // VTOOLS_EMBIMG_SYSTEM_SYSTEM_HEADER
+////////////////////////////////////////////////////////////////////////////////
+//  Launch ObjToVmsh                                                          //
+//  return : True if ObjToVmsh successfully started                           //
+////////////////////////////////////////////////////////////////////////////////
+bool ObjToVmsh::launch(const std::string& filepath)
+{
+    // Run ObjToVmsh
+    return run(filepath);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//  Run ObjToVmsh                                                             //
+//  return : True if ObjToVmsh successfully executed                          //
+////////////////////////////////////////////////////////////////////////////////
+bool ObjToVmsh::run(const std::string& filepath)
+{
+    // ObjToVmsh successfully executed
+    return true;
+}

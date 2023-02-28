@@ -37,38 +37,31 @@
 //   For more information, please refer to <https://unlicense.org>            //
 ////////////////////////////////////////////////////////////////////////////////
 //    VTools : Virtual Tools                                                  //
-//     System/System.h : VTools Embimg System management wrapper              //
+//     main.cpp : Main program entry point                                    //
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef VTOOLS_EMBIMG_SYSTEM_SYSTEM_HEADER
-#define VTOOLS_EMBIMG_SYSTEM_SYSTEM_HEADER
+#include "ObjToVmsh.h"
 
 
-    ////////////////////////////////////////////////////////////////////////////
-    //  Operating system configuration                                        //
-    ////////////////////////////////////////////////////////////////////////////
-    #if defined(_WIN32) || defined(_WIN64) || defined(__MINGW32__)
-        #define VTOOLS_EMBIMG_WINDOWS
-    #endif // Windows
+////////////////////////////////////////////////////////////////////////////////
+//  Standard program entry point                                              //
+//  return : Main program return code                                         //
+////////////////////////////////////////////////////////////////////////////////
+int main(int argc, char* argv[])
+{
+    // Check arguments
+    if (argc < 2)
+    {
+        return 1;
+    }
 
-    #if defined(__APPLE__)
-        #define VTOOLS_EMBIMG_MACOS
-    #endif // MacOS
+    // Start ObjToVmsh
+    ObjToVmsh objtovmsh;
+    if (!objtovmsh.launch(argv[1]))
+    {
+        // ObjToVmsh error occured
+        return 1;
+    }
 
-    #if defined(__linux__)
-        #define VTOOLS_EMBIMG_LINUX
-    #endif // Linux
-
-
-    ////////////////////////////////////////////////////////////////////////////
-    //  64bits or 32bits configuration                                        //
-    ////////////////////////////////////////////////////////////////////////////
-    #if defined(__x86_64__) || defined(_WIN64) || defined(__LP64__) || \
-        defined(__ia64) || defined(_M_X64) || defined(_M_IA64) || \
-        defined(__aarch64__) || defined(__powerpc64__)
-        #define VTOOLS_EMBIMG_64BITS
-    #else
-        #define VTOOLS_EMBIMG_32BITS
-    #endif
-
-
-#endif // VTOOLS_EMBIMG_SYSTEM_SYSTEM_HEADER
+    // Program successfully executed
+    return 0;
+}

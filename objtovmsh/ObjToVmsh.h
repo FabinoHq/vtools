@@ -37,38 +37,67 @@
 //   For more information, please refer to <https://unlicense.org>            //
 ////////////////////////////////////////////////////////////////////////////////
 //    VTools : Virtual Tools                                                  //
-//     System/System.h : VTools Embimg System management wrapper              //
+//     ObjToVmsh.h : ObjToVmsh main class management                          //
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef VTOOLS_EMBIMG_SYSTEM_SYSTEM_HEADER
-#define VTOOLS_EMBIMG_SYSTEM_SYSTEM_HEADER
+#ifndef VTOOLS_OBJTOVMSH_SPIRV_HEADER
+#define VTOOLS_OBJTOVMSH_SPIRV_HEADER
+
+    #include <iostream>
+    #include <iomanip>
+    #include <string>
+    #include <sstream>
+    #include <fstream>
+    #include <cstddef>
+    #include <cstdint>
+    #include <cstdio>
+    #include <vector>
+    #include <new>
 
 
     ////////////////////////////////////////////////////////////////////////////
-    //  Operating system configuration                                        //
+    //  ObjToVmsh main class definition                                       //
     ////////////////////////////////////////////////////////////////////////////
-    #if defined(_WIN32) || defined(_WIN64) || defined(__MINGW32__)
-        #define VTOOLS_EMBIMG_WINDOWS
-    #endif // Windows
+    class ObjToVmsh
+    {
+        public:
+            ////////////////////////////////////////////////////////////////////
+            //  ObjToVmsh default constructor                                 //
+            ////////////////////////////////////////////////////////////////////
+            ObjToVmsh();
 
-    #if defined(__APPLE__)
-        #define VTOOLS_EMBIMG_MACOS
-    #endif // MacOS
-
-    #if defined(__linux__)
-        #define VTOOLS_EMBIMG_LINUX
-    #endif // Linux
-
-
-    ////////////////////////////////////////////////////////////////////////////
-    //  64bits or 32bits configuration                                        //
-    ////////////////////////////////////////////////////////////////////////////
-    #if defined(__x86_64__) || defined(_WIN64) || defined(__LP64__) || \
-        defined(__ia64) || defined(_M_X64) || defined(_M_IA64) || \
-        defined(__aarch64__) || defined(__powerpc64__)
-        #define VTOOLS_EMBIMG_64BITS
-    #else
-        #define VTOOLS_EMBIMG_32BITS
-    #endif
+            ////////////////////////////////////////////////////////////////////
+            //  ObjToVmsh destructor                                          //
+            ////////////////////////////////////////////////////////////////////
+            ~ObjToVmsh();
 
 
-#endif // VTOOLS_EMBIMG_SYSTEM_SYSTEM_HEADER
+            ////////////////////////////////////////////////////////////////////
+            //  Launch ObjToVmsh                                              //
+            //  return : True if ObjToVmsh successfully started               //
+            ////////////////////////////////////////////////////////////////////
+            bool launch(const std::string& filepath);
+
+            ////////////////////////////////////////////////////////////////////
+            //  Run ObjToVmsh                                                 //
+            //  return : True if ObjToVmsh successfully executed              //
+            ////////////////////////////////////////////////////////////////////
+            bool run(const std::string& filepath);
+
+
+        private:
+            ////////////////////////////////////////////////////////////////////
+            //  ObjToVmsh private copy constructor : Not copyable             //
+            ////////////////////////////////////////////////////////////////////
+            ObjToVmsh(const ObjToVmsh&) = delete;
+
+            ////////////////////////////////////////////////////////////////////
+            //  ObjToVmsh private copy operator : Not copyable                //
+            ////////////////////////////////////////////////////////////////////
+            ObjToVmsh& operator=(const ObjToVmsh&) = delete;
+
+
+        private:
+    };
+
+
+#endif // VTOOLS_OBJTOVMSH_SPIRV_HEADER
