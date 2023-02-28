@@ -37,51 +37,38 @@
 //   For more information, please refer to <https://unlicense.org>            //
 ////////////////////////////////////////////////////////////////////////////////
 //    VTools : Virtual Tools                                                  //
-//     ObjToVmsh.cpp : ObjToVmsh main class management                        //
+//     System/System.h : VTools ObjToVmsh System management wrapper           //
 ////////////////////////////////////////////////////////////////////////////////
-#include "ObjToVmsh.h"
+#ifndef VTOOLS_OBJTOVMSH_SYSTEM_SYSTEM_HEADER
+#define VTOOLS_OBJTOVMSH_SYSTEM_SYSTEM_HEADER
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  ObjToVmsh default constructor                                             //
-////////////////////////////////////////////////////////////////////////////////
-ObjToVmsh::ObjToVmsh()
-{
+    ////////////////////////////////////////////////////////////////////////////
+    //  Operating system configuration                                        //
+    ////////////////////////////////////////////////////////////////////////////
+    #if defined(_WIN32) || defined(_WIN64) || defined(__MINGW32__)
+        #define VTOOLS_OBJTOVMSH_WINDOWS
+    #endif // Windows
 
-}
+    #if defined(__APPLE__)
+        #define VTOOLS_OBJTOVMSH_MACOS
+    #endif // MacOS
 
-////////////////////////////////////////////////////////////////////////////////
-//  ObjToVmsh destructor                                                      //
-////////////////////////////////////////////////////////////////////////////////
-ObjToVmsh::~ObjToVmsh()
-{
-
-}
+    #if defined(__linux__)
+        #define VTOOLS_OBJTOVMSH_LINUX
+    #endif // Linux
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  Launch ObjToVmsh                                                          //
-//  return : True if ObjToVmsh successfully started                           //
-////////////////////////////////////////////////////////////////////////////////
-bool ObjToVmsh::launch(const std::string& filepath)
-{
-    // Check system CPU
-    if (!SysCPUCheck())
-    {
-        // Invalid system CPU
-        return false;
-    }
+    ////////////////////////////////////////////////////////////////////////////
+    //  64bits or 32bits configuration                                        //
+    ////////////////////////////////////////////////////////////////////////////
+    #if defined(__x86_64__) || defined(_WIN64) || defined(__LP64__) || \
+        defined(__ia64) || defined(_M_X64) || defined(_M_IA64) || \
+        defined(__aarch64__) || defined(__powerpc64__)
+        #define VTOOLS_OBJTOVMSH_64BITS
+    #else
+        #define VTOOLS_OBJTOVMSH_32BITS
+    #endif
 
-    // Run ObjToVmsh
-    return run(filepath);
-}
 
-////////////////////////////////////////////////////////////////////////////////
-//  Run ObjToVmsh                                                             //
-//  return : True if ObjToVmsh successfully executed                          //
-////////////////////////////////////////////////////////////////////////////////
-bool ObjToVmsh::run(const std::string& filepath)
-{
-    // ObjToVmsh successfully executed
-    return true;
-}
+#endif // VTOOLS_OBJTOVMSH_SYSTEM_SYSTEM_HEADER

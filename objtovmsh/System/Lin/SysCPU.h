@@ -37,51 +37,59 @@
 //   For more information, please refer to <https://unlicense.org>            //
 ////////////////////////////////////////////////////////////////////////////////
 //    VTools : Virtual Tools                                                  //
-//     ObjToVmsh.cpp : ObjToVmsh main class management                        //
+//     System/Lin/SysCPU.h : System CPU management for Linux                  //
 ////////////////////////////////////////////////////////////////////////////////
-#include "ObjToVmsh.h"
+#ifndef VTOOLS_OBJTOVMSH_SYSTEM_LIN_SYSCPU_HEADER
+#define VTOOLS_OBJTOVMSH_SYSTEM_LIN_SYSCPU_HEADER
+
+    #include "../System.h"
+
+    #include <cstddef>
+    #include <cstdint>
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  ObjToVmsh default constructor                                             //
-////////////////////////////////////////////////////////////////////////////////
-ObjToVmsh::ObjToVmsh()
-{
+    ////////////////////////////////////////////////////////////////////////////
+    //  Swap 2 bytes unsigned integer endianness                              //
+    //  return : Swapped 2 bytes unsigned integer                             //
+    ////////////////////////////////////////////////////////////////////////////
+    #define SysByteSwap16 __builtin_bswap16
 
-}
+    ////////////////////////////////////////////////////////////////////////////
+    //  Swap 4 bytes unsigned integer endianness                              //
+    //  return : Swapped 4 bytes unsigned integer                             //
+    ////////////////////////////////////////////////////////////////////////////
+    #define SysByteSwap32 __builtin_bswap32
 
-////////////////////////////////////////////////////////////////////////////////
-//  ObjToVmsh destructor                                                      //
-////////////////////////////////////////////////////////////////////////////////
-ObjToVmsh::~ObjToVmsh()
-{
-
-}
+    ////////////////////////////////////////////////////////////////////////////
+    //  Swap 8 bytes unsigned integer endianness                              //
+    //  return : Swapped 8 bytes unsigned integer                             //
+    ////////////////////////////////////////////////////////////////////////////
+    #define SysByteSwap64 __builtin_bswap64
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  Launch ObjToVmsh                                                          //
-//  return : True if ObjToVmsh successfully started                           //
-////////////////////////////////////////////////////////////////////////////////
-bool ObjToVmsh::launch(const std::string& filepath)
-{
-    // Check system CPU
-    if (!SysCPUCheck())
-    {
-        // Invalid system CPU
-        return false;
-    }
+    ////////////////////////////////////////////////////////////////////////////
+    //  Compute 32 bits scan forward                                          //
+    //  return : Computed 32 bits scan forward                                //
+    ////////////////////////////////////////////////////////////////////////////
+    #define SysBitScanForward32(bits) (__builtin_ctz(bits))
 
-    // Run ObjToVmsh
-    return run(filepath);
-}
+    ////////////////////////////////////////////////////////////////////////////
+    //  Compute 32 bits scan reverse                                          //
+    //  return : Computed 32 bits scan reverse                                //
+    ////////////////////////////////////////////////////////////////////////////
+    #define SysBitScanReverse32(bits) (0x1F - __builtin_clz(bits))
 
-////////////////////////////////////////////////////////////////////////////////
-//  Run ObjToVmsh                                                             //
-//  return : True if ObjToVmsh successfully executed                          //
-////////////////////////////////////////////////////////////////////////////////
-bool ObjToVmsh::run(const std::string& filepath)
-{
-    // ObjToVmsh successfully executed
-    return true;
-}
+    ////////////////////////////////////////////////////////////////////////////
+    //  Compute 64 bits scan forward                                          //
+    //  return : Computed 64 bits scan forward                                //
+    ////////////////////////////////////////////////////////////////////////////
+    #define SysBitScanForward64(bits) (__builtin_ctzll(bits))
+
+    ////////////////////////////////////////////////////////////////////////////
+    //  Compute 64 bits scan reverse                                          //
+    //  return : Computed 64 bits scan reverse                                //
+    ////////////////////////////////////////////////////////////////////////////
+    #define SysBitScanReverse64(bits) (0x3F - __builtin_clzll(bits))
+
+
+#endif // VTOOLS_OBJTOVMSH_SYSTEM_LIN_SYSCPU_HEADER

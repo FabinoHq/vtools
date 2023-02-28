@@ -37,70 +37,77 @@
 //   For more information, please refer to <https://unlicense.org>            //
 ////////////////////////////////////////////////////////////////////////////////
 //    VTools : Virtual Tools                                                  //
-//     ObjToVmsh.h : ObjToVmsh main class management                          //
+//     System/Win/SysCPU.h : System CPU management for Windows                //
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef VTOOLS_OBJTOVMSH_OBJTOVMSH_HEADER
-#define VTOOLS_OBJTOVMSH_OBJTOVMSH_HEADER
+#ifndef VTOOLS_OBJTOVMSH_SYSTEM_WIN_SYSCPU_HEADER
+#define VTOOLS_OBJTOVMSH_SYSTEM_WIN_SYSCPU_HEADER
 
-    #include "System/System.h"
-    #include "System/SysCPU.h"
+    #include "../System.h"
 
-    #include <iostream>
-    #include <iomanip>
-    #include <string>
-    #include <sstream>
-    #include <fstream>
     #include <cstddef>
     #include <cstdint>
-    #include <cstdio>
-    #include <vector>
-    #include <new>
+    #include <cstdlib>
+    #include <intrin.h>
 
 
     ////////////////////////////////////////////////////////////////////////////
-    //  ObjToVmsh main class definition                                       //
+    //  Swap 2 bytes unsigned integer endianness                              //
+    //  return : Swapped 2 bytes unsigned integer                             //
     ////////////////////////////////////////////////////////////////////////////
-    class ObjToVmsh
+    #define SysByteSwap16 _byteswap_ushort
+
+    ////////////////////////////////////////////////////////////////////////////
+    //  Swap 4 bytes unsigned integer endianness                              //
+    //  return : Swapped 4 bytes unsigned integer                             //
+    ////////////////////////////////////////////////////////////////////////////
+    #define SysByteSwap32 _byteswap_ulong
+
+    ////////////////////////////////////////////////////////////////////////////
+    //  Swap 8 bytes unsigned integer endianness                              //
+    //  return : Swapped 8 bytes unsigned integer                             //
+    ////////////////////////////////////////////////////////////////////////////
+    #define SysByteSwap64 _byteswap_uint64
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    //  Compute 32 bits scan forward                                          //
+    //  return : Computed 32 bits scan forward                                //
+    ////////////////////////////////////////////////////////////////////////////
+    inline uint32_t SysBitScanForward32(uint32_t bits)
     {
-        public:
-            ////////////////////////////////////////////////////////////////////
-            //  ObjToVmsh default constructor                                 //
-            ////////////////////////////////////////////////////////////////////
-            ObjToVmsh();
+        _BitScanForward((unsigned long*)&bits, bits);
+        return bits;
+    }
 
-            ////////////////////////////////////////////////////////////////////
-            //  ObjToVmsh destructor                                          //
-            ////////////////////////////////////////////////////////////////////
-            ~ObjToVmsh();
+    ////////////////////////////////////////////////////////////////////////////
+    //  Compute 32 bits scan reverse                                          //
+    //  return : Computed 32 bits scan reverse                                //
+    ////////////////////////////////////////////////////////////////////////////
+    inline uint32_t SysBitScanReverse32(uint32_t bits)
+    {
+        _BitScanReverse((unsigned long*)&bits, bits);
+        return bits;
+    }
 
+    ////////////////////////////////////////////////////////////////////////////
+    //  Compute 64 bits scan forward                                          //
+    //  return : Computed 64 bits scan forward                                //
+    ////////////////////////////////////////////////////////////////////////////
+    inline uint64_t SysBitScanForward64(uint64_t bits)
+    {
+        _BitScanForward64((unsigned long*)&bits, bits);
+        return bits;
+    }
 
-            ////////////////////////////////////////////////////////////////////
-            //  Launch ObjToVmsh                                              //
-            //  return : True if ObjToVmsh successfully started               //
-            ////////////////////////////////////////////////////////////////////
-            bool launch(const std::string& filepath);
-
-            ////////////////////////////////////////////////////////////////////
-            //  Run ObjToVmsh                                                 //
-            //  return : True if ObjToVmsh successfully executed              //
-            ////////////////////////////////////////////////////////////////////
-            bool run(const std::string& filepath);
-
-
-        private:
-            ////////////////////////////////////////////////////////////////////
-            //  ObjToVmsh private copy constructor : Not copyable             //
-            ////////////////////////////////////////////////////////////////////
-            ObjToVmsh(const ObjToVmsh&) = delete;
-
-            ////////////////////////////////////////////////////////////////////
-            //  ObjToVmsh private copy operator : Not copyable                //
-            ////////////////////////////////////////////////////////////////////
-            ObjToVmsh& operator=(const ObjToVmsh&) = delete;
+    ////////////////////////////////////////////////////////////////////////////
+    //  Compute 64 bits scan reverse                                          //
+    //  return : Computed 64 bits scan reverse                                //
+    ////////////////////////////////////////////////////////////////////////////
+    inline uint64_t SysBitScanReverse64(uint64_t bits)
+    {
+        _BitScanReverse64((unsigned long*)&bits, bits);
+        return bits;
+    }
 
 
-        private:
-    };
-
-
-#endif // VTOOLS_OBJTOVMSH_OBJTOVMSH_HEADER
+#endif // VTOOLS_OBJTOVMSH_SYSTEM_WIN_SYSCPU_HEADER

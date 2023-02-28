@@ -3,8 +3,46 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjToVmsh.cpp" />
+    <ClCompile Include="System\SysCPU.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ObjToVmsh.h" />
+    <ClInclude Include="System\SysCPU.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\System.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Win\SysCPU.h">
+      <Filter>System\Win</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Math.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Matrix4x4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector2.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="System">
+      <UniqueIdentifier>{682203ae-e01f-42e5-8bf7-3578414b7067}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Win">
+      <UniqueIdentifier>{f4d368b2-b48b-466d-9188-2d56dc5586c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{bf5f6888-2ed7-49dd-8785-2a416a455b91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

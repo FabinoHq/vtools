@@ -129,9 +129,18 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjToVmsh.cpp" />
+    <ClCompile Include="System\SysCPU.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Math\Math.h" />
+    <ClInclude Include="Math\Matrix4x4.h" />
+    <ClInclude Include="Math\Vector2.h" />
+    <ClInclude Include="Math\Vector3.h" />
+    <ClInclude Include="Math\Vector4.h" />
     <ClInclude Include="ObjToVmsh.h" />
+    <ClInclude Include="System\SysCPU.h" />
+    <ClInclude Include="System\System.h" />
+    <ClInclude Include="System\Win\SysCPU.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
