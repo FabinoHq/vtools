@@ -123,6 +123,12 @@ bool ObjToVmsh::read(const std::string& filepath)
         return false;
     }
 
+    // Clear vertices, texcoords, normals, and faces
+    m_vertices.clear();
+    m_texcoords.clear();
+    m_normals.clear();
+    m_faces.clear();
+
     // Read input obj file
     bool reading = true;
     ObjToken curtok = OBJTOKEN_NONE;
@@ -304,7 +310,7 @@ bool ObjToVmsh::read(const std::string& filepath)
                                 m_faces.back().vertex[3] = curint;
                                 break;
                             default:
-                                // Invalid (only tris or quads are valids)
+                                // Invalid (only triangles or quads are valid)
                                 return false;
                         }
                         break;
@@ -329,7 +335,7 @@ bool ObjToVmsh::read(const std::string& filepath)
                                 m_faces.back().texcoord[3] = curint;
                                 break;
                             default:
-                                // Invalid (only tris or quads are valids)
+                                // Invalid (only triangles or quads are valid)
                                 return false;
                         }
                         break;
@@ -354,7 +360,7 @@ bool ObjToVmsh::read(const std::string& filepath)
                                 m_faces.back().normal[3] = curint;
                                 break;
                             default:
-                                // Invalid (only tris or quads are valids)
+                                // Invalid (only triangles or quads are valid)
                                 return false;
                         }
                         break;
@@ -403,8 +409,62 @@ bool ObjToVmsh::compute()
     // Triangulate mesh
     if (quads)
     {
-        // Todo : mesh triangulation
-        return false;
+        std::vector<Face> faces = m_faces;
+        m_faces.clear();
+        for (int32_t i = 0; i < faces.size(); ++i)
+        {
+            if (faces[i].quad)
+            {
+                // Triangulate quad
+                m_faces.push_back(Face());
+                m_faces.back().quad = false;
+                m_faces.back().vertex[0] = faces[i].vertex[0];
+                m_faces.back().vertex[1] = faces[i].vertex[1];
+                m_faces.back().vertex[2] = faces[i].vertex[2];
+                m_faces.back().vertex[3] = 0;
+                m_faces.back().texcoord[0] = faces[i].texcoord[0];
+                m_faces.back().texcoord[1] = faces[i].texcoord[1];
+                m_faces.back().texcoord[2] = faces[i].texcoord[2];
+                m_faces.back().texcoord[3] = 0;
+                m_faces.back().normal[0] = faces[i].normal[0];
+                m_faces.back().normal[1] = faces[i].normal[1];
+                m_faces.back().normal[2] = faces[i].normal[2];
+                m_faces.back().normal[3] = 0;
+
+                m_faces.push_back(Face());
+                m_faces.back().quad = false;
+                m_faces.back().vertex[0] = faces[i].vertex[2];
+                m_faces.back().vertex[1] = faces[i].vertex[3];
+                m_faces.back().vertex[2] = faces[i].vertex[0];
+                m_faces.back().vertex[3] = 0;
+                m_faces.back().texcoord[0] = faces[i].texcoord[2];
+                m_faces.back().texcoord[1] = faces[i].texcoord[3];
+                m_faces.back().texcoord[2] = faces[i].texcoord[0];
+                m_faces.back().texcoord[3] = 0;
+                m_faces.back().normal[0] = faces[i].normal[2];
+                m_faces.back().normal[1] = faces[i].normal[3];
+                m_faces.back().normal[2] = faces[i].normal[0];
+                m_faces.back().normal[3] = 0;
+            }
+            else
+            {
+                // Copy triangle
+                m_faces.push_back(Face());
+                m_faces.back().quad = false;
+                m_faces.back().vertex[0] = faces[i].vertex[0];
+                m_faces.back().vertex[1] = faces[i].vertex[1];
+                m_faces.back().vertex[2] = faces[i].vertex[2];
+                m_faces.back().vertex[3] = 0;
+                m_faces.back().texcoord[0] = faces[i].texcoord[0];
+                m_faces.back().texcoord[1] = faces[i].texcoord[1];
+                m_faces.back().texcoord[2] = faces[i].texcoord[2];
+                m_faces.back().texcoord[3] = 0;
+                m_faces.back().normal[0] = faces[i].normal[0];
+                m_faces.back().normal[1] = faces[i].normal[1];
+                m_faces.back().normal[2] = faces[i].normal[2];
+                m_faces.back().normal[3] = 0;
+            }
+        }
     }
 
     // Clear vertices and indices
