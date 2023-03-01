@@ -3,7 +3,7 @@
 //  \\ .   \            _________/ . . . . . . . . . . . . . . . . . . .   /  //
 //   \\ .   \       ___/ . . . . .    ____________________________________/   //
 //    \\ .   \   __/. . .   _________/  / \ // .    \ //.  ///. _______/      //
-//     \\ .   \_//      ___/.  ____ ___/  ///.      ///.  ///. /____          //
+//     \\ .   \_//      ___/.  ________/  ///.      ///.  ///. /____          //
 //      \\ .   \/     _/ //.  / //. /\   ///. /\   ///.  / \\ .     \         //
 //       \\ .        /  //.  / //. / /  ///. / /  ///.  /   \\____   \        //
 //        \\ .      /  //.  / //.  \/  ///.  \/  ///.  /________//   /        //
@@ -82,6 +82,164 @@ bool ObjToVmsh::launch(const std::string& filepath)
 ////////////////////////////////////////////////////////////////////////////////
 bool ObjToVmsh::run(const std::string& filepath)
 {
+    // Read input obj file
+    if (!read(filepath))
+    {
+        // Could not read input obj file
+        return false;
+    }
+
     // ObjToVmsh successfully executed
+    return true;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//  Read obj file                                                             //
+//  return : True if obj file is successfully read                            //
+////////////////////////////////////////////////////////////////////////////////
+bool ObjToVmsh::read(const std::string& filepath)
+{
+    // Open input obj file
+    std::ifstream input;
+    input.open(filepath, std::ios::in);
+    if (!input.is_open())
+    {
+        // Could not open input obj file
+        return false;
+    }
+
+    // Read input obj file
+    bool reading = true;
+    ObjToken curtok = OBJTOKEN_NONE;
+    float curfloat = 0.0f;
+    int16_t curint = 0;
+    std::string curstr = "";
+    while (reading)
+    {
+        // Get current token
+        char ch = 0;
+        do
+        {
+            if (!input.get(ch))
+            {
+                reading = false;
+                break;
+            }
+        } while (isspace(ch) && (ch != ' '));
+
+        // Faces space separators
+        if (ch == ' ')
+        {
+            if ((curtok == OBJTOKEN_FACE_VERTEX) ||
+                (curtok == OBJTOKEN_FACE_TEXCOORD) ||
+                (curtok == OBJTOKEN_FACE_NORMAL))
+            {
+                curtok = OBJTOKEN_FACE_VERTEX;
+            }
+            continue;
+        }
+
+        // Parse current token
+        switch (ch)
+        {
+            // Vertex
+            case 'v':
+                curtok = OBJTOKEN_VERTEX;
+                break;
+
+            // Texcoord
+            case 't':
+                if (curtok == OBJTOKEN_VERTEX) { curtok = OBJTOKEN_TEXCOORD; }
+                break;
+
+            // Normal
+            case 'n':
+                if (curtok == OBJTOKEN_VERTEX) { curtok = OBJTOKEN_NORMAL; }
+                break;
+
+            // Face
+            case 'f':
+                curtok = OBJTOKEN_FACE_VERTEX;
+                break;
+
+            // Faces type separator
+            case '/':
+                switch (curtok)
+                {
+                    case OBJTOKEN_FACE_VERTEX:
+                        curtok = OBJTOKEN_FACE_TEXCOORD;
+                        break;
+                    case OBJTOKEN_FACE_TEXCOORD:
+                        curtok = OBJTOKEN_FACE_NORMAL;
+                        break;
+                    default:
+                        break;
+                }
+                break;
+
+            // Value
+            case '0': case '1': case '2': case '3': case '4':
+            case '5': case '6': case '7': case '8': case '9':
+            case '.': case '-':
+                switch (curtok)
+                {
+                    // Vertex
+                    case OBJTOKEN_VERTEX:
+                        input.putback(ch);
+                        input >> curfloat;
+                        break;
+
+                    // Texcoord
+                    case OBJTOKEN_TEXCOORD:
+                        input.putback(ch);
+                        input >> curfloat;
+                        break;
+
+                    // Normal
+                    case OBJTOKEN_NORMAL:
+                        input.putback(ch);
+                        input >> curfloat;
+                        break;
+
+                    // Face vertex
+                    case OBJTOKEN_FACE_VERTEX:
+                        input.putback(ch);
+                        input >> curint;
+                        break;
+
+                    // Face texcoord
+                    case OBJTOKEN_FACE_TEXCOORD:
+                        input.putback(ch);
+                        input >> curint;
+                        break;
+
+                    // Face normal
+                    case OBJTOKEN_FACE_NORMAL:
+                        input.putback(ch);
+                        input >> curint;
+                        break;
+
+                    // Unknown
+                    default:
+                        break;
+                }
+                break;
+
+            // Comment
+            case '#':
+                std::getline(input, curstr);
+                curtok = OBJTOKEN_NONE;
+                break;
+
+            // Unknown
+            default:
+                curtok = OBJTOKEN_NONE;
+                break;
+        }
+    }
+
+    // Input obj file successfully read
+    input.close();
     return true;
 }
