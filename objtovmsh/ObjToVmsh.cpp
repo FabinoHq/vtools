@@ -89,6 +89,13 @@ bool ObjToVmsh::run(const std::string& filepath)
         return false;
     }
 
+    // Compute vertices and indices
+    if (!compute())
+    {
+        // Could not compute vertices and indices
+        return false;
+    }
+
     // Write output vmsh file
     if (!write(filepath + ".vmsh"))
     {
@@ -120,7 +127,7 @@ bool ObjToVmsh::read(const std::string& filepath)
     bool reading = true;
     ObjToken curtok = OBJTOKEN_NONE;
     float curfloat = 0.0f;
-    uint16_t curint = 0;
+    int32_t curint = 0;
     int32_t curindex = 0;
     std::string curstr = "";
     while (reading)
@@ -266,7 +273,7 @@ bool ObjToVmsh::read(const std::string& filepath)
 
                     // Face vertex
                     case OBJTOKEN_FACE_VERTEX:
-                        if ((ch != '.') && (ch != '-')) { input.putback(ch); }
+                        if (ch != '.') { input.putback(ch); }
                         input >> curint;
                         switch (curindex)
                         {
@@ -304,7 +311,7 @@ bool ObjToVmsh::read(const std::string& filepath)
 
                     // Face texcoord
                     case OBJTOKEN_FACE_TEXCOORD:
-                        if ((ch != '.') && (ch != '-')) { input.putback(ch); }
+                        if (ch != '.') { input.putback(ch); }
                         input >> curint;
                         switch (curindex)
                         {
@@ -329,7 +336,7 @@ bool ObjToVmsh::read(const std::string& filepath)
 
                     // Face normal
                     case OBJTOKEN_FACE_NORMAL:
-                        if ((ch != '.') && (ch != '-')) { input.putback(ch); }
+                        if (ch != '.') { input.putback(ch); }
                         input >> curint;
                         switch (curindex)
                         {
@@ -377,6 +384,166 @@ bool ObjToVmsh::read(const std::string& filepath)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+//  Compute vertices and indices                                              //
+//  return : True if vertices and indices are computed                        //
+////////////////////////////////////////////////////////////////////////////////
+bool ObjToVmsh::compute()
+{
+    // Check for quads
+    bool quads = false;
+    for (int32_t i = 0; i < m_faces.size(); ++i)
+    {
+        if (m_faces[i].quad)
+        {
+            quads = true;
+            break;
+        }
+    }
+
+    // Triangulate mesh
+    if (quads)
+    {
+        // Todo : mesh triangulation
+        return false;
+    }
+
+    // Clear vertices and indices
+    m_verts.clear();
+    m_indices.clear();
+
+    // Compute all vertices for each triangles
+    int16_t curIndex = 0;
+    for (int32_t i = 0; i < m_faces.size(); ++i)
+    {
+        for (int32_t j = 0; j < 3; ++j)
+        {
+            // Get obj indices
+            int32_t vertexIndex = (m_faces[i].vertex[j])-1;
+            int32_t texcoordIndex = (m_faces[i].texcoord[j])-1;
+            int32_t normalIndex = (m_faces[i].normal[j])-1;
+
+            // Vertex data
+            Vertex vertex;
+            vertex.x = 0.0f;
+            vertex.y = 0.0f;
+            vertex.z = 0.0f;
+
+            Texcoord texcoord;
+            texcoord.x = 0.0f;
+            texcoord.y = 0.0f;
+
+            Normal normal;
+            normal.x = 0.0f;
+            normal.y = 0.0f;
+            normal.z = 0.0f;
+
+            // Set vertex data
+            if (vertexIndex >= 0)
+            {
+                // Check vertex index
+                if (vertexIndex >= m_vertices.size())
+                {
+                    // Invalid vertex index
+                    return false;
+                }
+                vertex.x = m_vertices[vertexIndex].x;
+                vertex.y = m_vertices[vertexIndex].y;
+                vertex.z = m_vertices[vertexIndex].z;
+            }
+            else
+            {
+                // Todo : handle negative indices
+                return false;
+            }
+
+            // Set texcoord data
+            if (texcoordIndex >= 0)
+            {
+                // Check vertex index
+                if (texcoordIndex >= m_texcoords.size())
+                {
+                    // Invalid vertex index
+                    return false;
+                }
+                texcoord.x = m_texcoords[texcoordIndex].x;
+                texcoord.y = m_texcoords[texcoordIndex].y;
+            }
+            else
+            {
+                // Todo : handle negative indices
+                return false;
+            }
+
+            // Set normal data
+            if (normalIndex >= 0)
+            {
+                // Check normal index
+                if (normalIndex >= m_normals.size())
+                {
+                    // Invalid normal index
+                    return false;
+                }
+                normal.x = m_normals[normalIndex].x;
+                normal.y = m_normals[normalIndex].y;
+                normal.z = m_normals[normalIndex].z;
+            }
+            else
+            {
+                // Todo : handle negative indices
+                return false;
+            }
+
+            // Reverse texcoord Y axis
+            texcoord.y = 1.0f-texcoord.y;
+
+            // Clamp texcoord
+            if (texcoord.x <= 0.0f) { texcoord.x = 0.0f; }
+            if (texcoord.x >= 1.0f) { texcoord.x = 1.0f; }
+            if (texcoord.y <= 0.0f) { texcoord.y = 0.0f; }
+            if (texcoord.y >= 1.0f) { texcoord.y = 1.0f; }
+
+            // Normalize normal
+            Vector3 normalVector;
+            normalVector.set(normal.x, normal.y, normal.z);
+            normalVector.normalize();
+            normal.x = normalVector.vec[0];
+            normal.y = normalVector.vec[1];
+            normal.z = normalVector.vec[2];
+
+            // Clamp normal
+            if (normal.x <= -1.0f) { normal.x = -1.0f; }
+            if (normal.x >= 1.0f) { normal.x = 1.0f; }
+            if (normal.y <= -1.0f) { normal.y = -1.0f; }
+            if (normal.y >= 1.0f) { normal.y = 1.0f; }
+            if (normal.z <= -1.0f) { normal.z = -1.0f; }
+            if (normal.z >= 1.0f) { normal.z = 1.0f; }
+
+            // Check if the vertex already exists in vector
+            for (int32_t k = 0; k < m_verts.size(); ++k)
+            {
+                // Todo : only add vertex if not found
+            }
+
+            // Add new vertex
+            m_verts.push_back(vertex.x);
+            m_verts.push_back(vertex.y);
+            m_verts.push_back(vertex.z);
+            m_verts.push_back(texcoord.x);
+            m_verts.push_back(texcoord.y);
+            m_verts.push_back(normal.x);
+            m_verts.push_back(normal.y);
+            m_verts.push_back(normal.z);
+
+            // Add new index
+            m_indices.push_back(curIndex++);
+        }
+    }
+
+    // Vertices and indices are successfully computed
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 //  Write vmsh file                                                           //
 //  return : True if vmsh file is successfully written                        //
 ////////////////////////////////////////////////////////////////////////////////
@@ -384,52 +551,36 @@ bool ObjToVmsh::write(const std::string& filepath)
 {
     // Open output vmsh file
     std::ofstream output;
-    output.open(filepath, std::ios::out | std::ios::trunc);
+    output.open(filepath, std::ios::out | std::ios::trunc | std::ios::binary);
     if (!output.is_open())
     {
         // Could not open output vmsh file
         return false;
     }
 
-    output << "Vertices :\n";
-    for (int i = 0; i < m_vertices.size(); ++i)
-    {
-        output << m_vertices[i].x << ' ' <<
-            m_vertices[i].y << ' ' << m_vertices[i].z << '\n';
-    }
+    // Write VMSH header
+    char header[] = "VMSH";
+    char majorVersion = 1;
+    char minorVersion = 0;
+    output.write(header, sizeof(char)*4);
+    output.write(&majorVersion, sizeof(char));
+    output.write(&minorVersion, sizeof(char));
 
-    output << "Texcoords :\n";
-    for (int i = 0; i < m_texcoords.size(); ++i)
-    {
-        output << m_texcoords[i].x << ' ' << m_texcoords[i].y << '\n';
-    }
+    // Write static mesh type
+    char animated = 0;
+    output.write(&animated, sizeof(char));
 
-    output << "Normals :\n";
-    for (int i = 0; i < m_normals.size(); ++i)
-    {
-        output << m_normals[i].x << ' ' <<
-            m_normals[i].y << ' ' << m_normals[i].z << '\n';
-    }
+    // Write vertices and indices count
+    uint32_t verticesCount = static_cast<uint32_t>(m_verts.size());
+    uint32_t indicesCount = static_cast<uint32_t>(m_indices.size());
+    output.write((char*)&verticesCount, sizeof(uint32_t));
+    output.write((char*)&indicesCount, sizeof(uint32_t));
 
-    output << "Faces :\n";
-    for (int i = 0; i < m_faces.size(); ++i)
-    {
-        output << (m_faces[i].quad?("quad"):("tri")) << '\n';
-        output << m_faces[i].vertex[0] << '/' <<
-            m_faces[i].texcoord[0] << '/' << m_faces[i].normal[0] << ' ';
-        output << m_faces[i].vertex[1] << '/' <<
-            m_faces[i].texcoord[1] << '/' << m_faces[i].normal[1] << ' ';
-        output << m_faces[i].vertex[2] << '/' <<
-            m_faces[i].texcoord[2] << '/' << m_faces[i].normal[2] << ' ';
+    // Write vertices
+    output.write((char*)m_verts.data(), sizeof(float)*verticesCount);
 
-        if (m_faces[i].quad)
-        {
-            output << m_faces[i].vertex[3] << '/' <<
-                m_faces[i].texcoord[3] << '/' << m_faces[i].normal[3] << ' ';
-        }
-
-        output << '\n';
-    }
+    // Write indices
+    output.write((char*)m_indices.data(), sizeof(uint16_t)*indicesCount);
 
     // Output vmsh file successfully written
     output.close();

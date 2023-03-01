@@ -44,6 +44,8 @@
 
     #include "System/System.h"
     #include "System/SysCPU.h"
+    #include "Math/Math.h"
+    #include "Math/Vector3.h"
 
     #include <iostream>
     #include <iomanip>
@@ -107,9 +109,9 @@
     struct Face
     {
         bool quad;
-        uint16_t vertex[4];
-        uint16_t texcoord[4];
-        uint16_t normal[4];
+        int32_t vertex[4];
+        int32_t texcoord[4];
+        int32_t normal[4];
     };
 
 
@@ -151,6 +153,12 @@
             bool read(const std::string& filepath);
 
             ////////////////////////////////////////////////////////////////////
+            //  Compute vertices and indices                                  //
+            //  return : True if vertices and indices are computed            //
+            ////////////////////////////////////////////////////////////////////
+            bool compute();
+
+            ////////////////////////////////////////////////////////////////////
             //  Write vmsh file                                               //
             //  return : True if vmsh file is successfully written            //
             ////////////////////////////////////////////////////////////////////
@@ -170,10 +178,13 @@
 
 
         private:
-            std::vector<Vertex>     m_vertices;     // Obj vertices
-            std::vector<Texcoord>   m_texcoords;    // Obj texcoords
-            std::vector<Normal>     m_normals;      // Obj normals
-            std::vector<Face>       m_faces;        // Obj faces
+            std::vector<Vertex>     m_vertices;         // Obj vertices
+            std::vector<Texcoord>   m_texcoords;        // Obj texcoords
+            std::vector<Normal>     m_normals;          // Obj normals
+            std::vector<Face>       m_faces;            // Obj faces
+
+            std::vector<float>      m_verts;            // Vmsh vertices
+            std::vector<uint16_t>   m_indices;          // Vmsh indices
     };
 
 
