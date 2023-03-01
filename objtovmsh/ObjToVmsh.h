@@ -101,6 +101,17 @@
         float z;
     };
 
+    ////////////////////////////////////////////////////////////////////////////
+    //  Face data structure                                                   //
+    ////////////////////////////////////////////////////////////////////////////
+    struct Face
+    {
+        bool quad;
+        uint16_t vertex[4];
+        uint16_t texcoord[4];
+        uint16_t normal[4];
+    };
+
 
     ////////////////////////////////////////////////////////////////////////////
     //  ObjToVmsh main class definition                                       //
@@ -162,6 +173,7 @@
             std::vector<Vertex>     m_vertices;     // Obj vertices
             std::vector<Texcoord>   m_texcoords;    // Obj texcoords
             std::vector<Normal>     m_normals;      // Obj normals
+            std::vector<Face>       m_faces;        // Obj faces
     };
 
 

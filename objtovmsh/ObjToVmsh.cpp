@@ -139,11 +139,11 @@ bool ObjToVmsh::read(const std::string& filepath)
         // Faces space separators
         if (ch == ' ')
         {
-            if ((curtok == OBJTOKEN_FACE_VERTEX) ||
-                (curtok == OBJTOKEN_FACE_TEXCOORD) ||
+            if ((curtok == OBJTOKEN_FACE_TEXCOORD) ||
                 (curtok == OBJTOKEN_FACE_NORMAL))
             {
                 curtok = OBJTOKEN_FACE_VERTEX;
+                ++curindex;
             }
             continue;
         }
@@ -268,18 +268,88 @@ bool ObjToVmsh::read(const std::string& filepath)
                     case OBJTOKEN_FACE_VERTEX:
                         if ((ch != '.') && (ch != '-')) { input.putback(ch); }
                         input >> curint;
+                        switch (curindex)
+                        {
+                            case 0:
+                                m_faces.push_back(Face());
+                                m_faces.back().quad = false;
+                                m_faces.back().vertex[0] = curint;
+                                m_faces.back().vertex[1] = 0;
+                                m_faces.back().vertex[2] = 0;
+                                m_faces.back().vertex[3] = 0;
+                                m_faces.back().texcoord[0] = 0;
+                                m_faces.back().texcoord[1] = 0;
+                                m_faces.back().texcoord[2] = 0;
+                                m_faces.back().texcoord[3] = 0;
+                                m_faces.back().normal[0] = 0;
+                                m_faces.back().normal[1] = 0;
+                                m_faces.back().normal[2] = 0;
+                                m_faces.back().normal[3] = 0;
+                                break;
+                            case 1:
+                                m_faces.back().vertex[1] = curint;
+                                break;
+                            case 2:
+                                m_faces.back().vertex[2] = curint;
+                                break;
+                            case 3:
+                                m_faces.back().quad = true;
+                                m_faces.back().vertex[3] = curint;
+                                break;
+                            default:
+                                // Invalid (only tris or quads are valids)
+                                return false;
+                        }
                         break;
 
                     // Face texcoord
                     case OBJTOKEN_FACE_TEXCOORD:
                         if ((ch != '.') && (ch != '-')) { input.putback(ch); }
                         input >> curint;
+                        switch (curindex)
+                        {
+                            case 0:
+                                m_faces.back().texcoord[0] = curint;
+                                break;
+                            case 1:
+                                m_faces.back().texcoord[1] = curint;
+                                break;
+                            case 2:
+                                m_faces.back().texcoord[2] = curint;
+                                break;
+                            case 3:
+                                m_faces.back().quad = true;
+                                m_faces.back().texcoord[3] = curint;
+                                break;
+                            default:
+                                // Invalid (only tris or quads are valids)
+                                return false;
+                        }
                         break;
 
                     // Face normal
                     case OBJTOKEN_FACE_NORMAL:
                         if ((ch != '.') && (ch != '-')) { input.putback(ch); }
                         input >> curint;
+                        switch (curindex)
+                        {
+                            case 0:
+                                m_faces.back().normal[0] = curint;
+                                break;
+                            case 1:
+                                m_faces.back().normal[1] = curint;
+                                break;
+                            case 2:
+                                m_faces.back().normal[2] = curint;
+                                break;
+                            case 3:
+                                m_faces.back().quad = true;
+                                m_faces.back().normal[3] = curint;
+                                break;
+                            default:
+                                // Invalid (only tris or quads are valids)
+                                return false;
+                        }
                         break;
 
                     // Unknown
@@ -339,6 +409,26 @@ bool ObjToVmsh::write(const std::string& filepath)
     {
         output << m_normals[i].x << ' ' <<
             m_normals[i].y << ' ' << m_normals[i].z << '\n';
+    }
+
+    output << "Faces :\n";
+    for (int i = 0; i < m_faces.size(); ++i)
+    {
+        output << (m_faces[i].quad?("quad"):("tri")) << '\n';
+        output << m_faces[i].vertex[0] << '/' <<
+            m_faces[i].texcoord[0] << '/' << m_faces[i].normal[0] << ' ';
+        output << m_faces[i].vertex[1] << '/' <<
+            m_faces[i].texcoord[1] << '/' << m_faces[i].normal[1] << ' ';
+        output << m_faces[i].vertex[2] << '/' <<
+            m_faces[i].texcoord[2] << '/' << m_faces[i].normal[2] << ' ';
+
+        if (m_faces[i].quad)
+        {
+            output << m_faces[i].vertex[3] << '/' <<
+                m_faces[i].texcoord[3] << '/' << m_faces[i].normal[3] << ' ';
+        }
+
+        output << '\n';
     }
 
     // Output vmsh file successfully written
