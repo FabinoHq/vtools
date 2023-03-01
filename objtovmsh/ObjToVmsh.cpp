@@ -89,6 +89,13 @@ bool ObjToVmsh::run(const std::string& filepath)
         return false;
     }
 
+    // Write output vmsh file
+    if (!write(filepath + ".vmsh"))
+    {
+        // Could not write output vmsh file
+        return false;
+    }
+
     // ObjToVmsh successfully executed
     return true;
 }
@@ -113,7 +120,8 @@ bool ObjToVmsh::read(const std::string& filepath)
     bool reading = true;
     ObjToken curtok = OBJTOKEN_NONE;
     float curfloat = 0.0f;
-    int16_t curint = 0;
+    uint16_t curint = 0;
+    int32_t curindex = 0;
     std::string curstr = "";
     while (reading)
     {
@@ -146,21 +154,25 @@ bool ObjToVmsh::read(const std::string& filepath)
             // Vertex
             case 'v':
                 curtok = OBJTOKEN_VERTEX;
+                curindex = 0;
                 break;
 
             // Texcoord
             case 't':
                 if (curtok == OBJTOKEN_VERTEX) { curtok = OBJTOKEN_TEXCOORD; }
+                curindex = 0;
                 break;
 
             // Normal
             case 'n':
                 if (curtok == OBJTOKEN_VERTEX) { curtok = OBJTOKEN_NORMAL; }
+                curindex = 0;
                 break;
 
             // Face
             case 'f':
                 curtok = OBJTOKEN_FACE_VERTEX;
+                curindex = 0;
                 break;
 
             // Faces type separator
@@ -188,35 +200,85 @@ bool ObjToVmsh::read(const std::string& filepath)
                     case OBJTOKEN_VERTEX:
                         input.putback(ch);
                         input >> curfloat;
+                        switch (curindex)
+                        {
+                            case 0:
+                                m_vertices.push_back(Vertex());
+                                m_vertices.back().x = curfloat;
+                                m_vertices.back().y = 0.0f;
+                                m_vertices.back().z = 0.0f;
+                                break;
+                            case 1:
+                                m_vertices.back().y = curfloat;
+                                break;
+                            case 2:
+                                m_vertices.back().z = curfloat;
+                                break;
+                            default:
+                                break;
+                        }
+                        ++curindex;
                         break;
 
                     // Texcoord
                     case OBJTOKEN_TEXCOORD:
                         input.putback(ch);
                         input >> curfloat;
+                        switch (curindex)
+                        {
+                            case 0:
+                                m_texcoords.push_back(Texcoord());
+                                m_texcoords.back().x = curfloat;
+                                m_texcoords.back().y = 0.0f;
+                                break;
+                            case 1:
+                                m_texcoords.back().y = curfloat;
+                                break;
+                            default:
+                                break;
+                        }
+                        ++curindex;
                         break;
 
                     // Normal
                     case OBJTOKEN_NORMAL:
                         input.putback(ch);
                         input >> curfloat;
+                        switch (curindex)
+                        {
+                            case 0:
+                                m_normals.push_back(Normal());
+                                m_normals.back().x = curfloat;
+                                m_normals.back().y = 0.0f;
+                                m_normals.back().z = 0.0f;
+                                break;
+                            case 1:
+                                m_normals.back().y = curfloat;
+                                break;
+                            case 2:
+                                m_normals.back().z = curfloat;
+                                break;
+                            default:
+                                break;
+                        }
+                        ++curindex;
                         break;
 
                     // Face vertex
                     case OBJTOKEN_FACE_VERTEX:
-                        input.putback(ch);
+                        if ((ch != '.') && (ch != '-')) { input.putback(ch); }
                         input >> curint;
                         break;
 
                     // Face texcoord
                     case OBJTOKEN_FACE_TEXCOORD:
-                        input.putback(ch);
+                        if ((ch != '.') && (ch != '-')) { input.putback(ch); }
                         input >> curint;
                         break;
 
                     // Face normal
                     case OBJTOKEN_FACE_NORMAL:
-                        input.putback(ch);
+                        if ((ch != '.') && (ch != '-')) { input.putback(ch); }
                         input >> curint;
                         break;
 
@@ -241,5 +303,45 @@ bool ObjToVmsh::read(const std::string& filepath)
 
     // Input obj file successfully read
     input.close();
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//  Write vmsh file                                                           //
+//  return : True if vmsh file is successfully written                        //
+////////////////////////////////////////////////////////////////////////////////
+bool ObjToVmsh::write(const std::string& filepath)
+{
+    // Open output vmsh file
+    std::ofstream output;
+    output.open(filepath, std::ios::out | std::ios::trunc);
+    if (!output.is_open())
+    {
+        // Could not open output vmsh file
+        return false;
+    }
+
+    output << "Vertices :\n";
+    for (int i = 0; i < m_vertices.size(); ++i)
+    {
+        output << m_vertices[i].x << ' ' <<
+            m_vertices[i].y << ' ' << m_vertices[i].z << '\n';
+    }
+
+    output << "Texcoords :\n";
+    for (int i = 0; i < m_texcoords.size(); ++i)
+    {
+        output << m_texcoords[i].x << ' ' << m_texcoords[i].y << '\n';
+    }
+
+    output << "Normals :\n";
+    for (int i = 0; i < m_normals.size(); ++i)
+    {
+        output << m_normals[i].x << ' ' <<
+            m_normals[i].y << ' ' << m_normals[i].z << '\n';
+    }
+
+    // Output vmsh file successfully written
+    output.close();
     return true;
 }
