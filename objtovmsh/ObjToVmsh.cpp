@@ -581,7 +581,8 @@ bool ObjToVmsh::compute()
             bool vertexFound = false;
             for (int32_t k = 0; k < verticesData.size(); ++k)
             {
-                if (vertsAreEqual(vertexData.vx, verticesData[k].vx) &&
+                if ((!verticesData[k].copy) &&
+                    vertsAreEqual(vertexData.vx, verticesData[k].vx) &&
                     vertsAreEqual(vertexData.vy, verticesData[k].vy) &&
                     vertsAreEqual(vertexData.vz, verticesData[k].vz) &&
                     vertsAreEqual(vertexData.tx, verticesData[k].tx) &&
