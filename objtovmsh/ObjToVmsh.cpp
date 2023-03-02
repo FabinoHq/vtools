@@ -473,6 +473,7 @@ bool ObjToVmsh::compute()
 
     // Compute all vertices for each triangles
     int16_t curIndex = 0;
+    std::vector<VertexData> verticesData;
     for (int32_t i = 0; i < m_faces.size(); ++i)
     {
         for (int32_t j = 0; j < 3; ++j)
@@ -483,19 +484,17 @@ bool ObjToVmsh::compute()
             int32_t normalIndex = (m_faces[i].normal[j])-1;
 
             // Vertex data
-            Vertex vertex;
-            vertex.x = 0.0f;
-            vertex.y = 0.0f;
-            vertex.z = 0.0f;
-
-            Texcoord texcoord;
-            texcoord.x = 0.0f;
-            texcoord.y = 0.0f;
-
-            Normal normal;
-            normal.x = 0.0f;
-            normal.y = 0.0f;
-            normal.z = 0.0f;
+            VertexData vertexData;
+            vertexData.copy = false;
+            vertexData.index = 0;
+            vertexData.vx = 0.0f;
+            vertexData.vy = 0.0f;
+            vertexData.vz = 0.0f;
+            vertexData.tx = 0.0f;
+            vertexData.ty = 0.0f;
+            vertexData.nx = 0.0f;
+            vertexData.ny = 0.0f;
+            vertexData.nz = 0.0f;
 
             // Set vertex data
             if (vertexIndex >= 0)
@@ -506,9 +505,9 @@ bool ObjToVmsh::compute()
                     // Invalid vertex index
                     return false;
                 }
-                vertex.x = m_vertices[vertexIndex].x;
-                vertex.y = m_vertices[vertexIndex].y;
-                vertex.z = m_vertices[vertexIndex].z;
+                vertexData.vx = m_vertices[vertexIndex].x;
+                vertexData.vy = m_vertices[vertexIndex].y;
+                vertexData.vz = m_vertices[vertexIndex].z;
             }
             else
             {
@@ -525,8 +524,8 @@ bool ObjToVmsh::compute()
                     // Invalid vertex index
                     return false;
                 }
-                texcoord.x = m_texcoords[texcoordIndex].x;
-                texcoord.y = m_texcoords[texcoordIndex].y;
+                vertexData.tx = m_texcoords[texcoordIndex].x;
+                vertexData.ty = m_texcoords[texcoordIndex].y;
             }
             else
             {
@@ -543,9 +542,9 @@ bool ObjToVmsh::compute()
                     // Invalid normal index
                     return false;
                 }
-                normal.x = m_normals[normalIndex].x;
-                normal.y = m_normals[normalIndex].y;
-                normal.z = m_normals[normalIndex].z;
+                vertexData.nx = m_normals[normalIndex].x;
+                vertexData.ny = m_normals[normalIndex].y;
+                vertexData.nz = m_normals[normalIndex].z;
             }
             else
             {
@@ -554,49 +553,96 @@ bool ObjToVmsh::compute()
             }
 
             // Reverse texcoord Y axis
-            texcoord.y = 1.0f-texcoord.y;
+            vertexData.ty = 1.0f-vertexData.ty;
 
             // Clamp texcoord
-            if (texcoord.x <= 0.0f) { texcoord.x = 0.0f; }
-            if (texcoord.x >= 1.0f) { texcoord.x = 1.0f; }
-            if (texcoord.y <= 0.0f) { texcoord.y = 0.0f; }
-            if (texcoord.y >= 1.0f) { texcoord.y = 1.0f; }
+            if (vertexData.tx <= 0.0f) { vertexData.tx = 0.0f; }
+            if (vertexData.tx >= 1.0f) { vertexData.tx = 1.0f; }
+            if (vertexData.ty <= 0.0f) { vertexData.ty = 0.0f; }
+            if (vertexData.ty >= 1.0f) { vertexData.ty = 1.0f; }
 
             // Normalize normal
             Vector3 normalVector;
-            normalVector.set(normal.x, normal.y, normal.z);
+            normalVector.set(vertexData.nx, vertexData.ny, vertexData.nz);
             normalVector.normalize();
-            normal.x = normalVector.vec[0];
-            normal.y = normalVector.vec[1];
-            normal.z = normalVector.vec[2];
+            vertexData.nx = normalVector.vec[0];
+            vertexData.ny = normalVector.vec[1];
+            vertexData.nz = normalVector.vec[2];
 
             // Clamp normal
-            if (normal.x <= -1.0f) { normal.x = -1.0f; }
-            if (normal.x >= 1.0f) { normal.x = 1.0f; }
-            if (normal.y <= -1.0f) { normal.y = -1.0f; }
-            if (normal.y >= 1.0f) { normal.y = 1.0f; }
-            if (normal.z <= -1.0f) { normal.z = -1.0f; }
-            if (normal.z >= 1.0f) { normal.z = 1.0f; }
+            if (vertexData.nx <= -1.0f) {vertexData.nx = -1.0f; }
+            if (vertexData.nx >= 1.0f) { vertexData.nx = 1.0f; }
+            if (vertexData.ny <= -1.0f) { vertexData.ny = -1.0f; }
+            if (vertexData.ny >= 1.0f) { vertexData.ny = 1.0f; }
+            if (vertexData.nz <= -1.0f) { vertexData.nz = -1.0f; }
+            if (vertexData.nz >= 1.0f) { vertexData.nz = 1.0f; }
 
-            // Check if the vertex already exists in vector
-            for (int32_t k = 0; k < m_verts.size(); ++k)
+            // Check if the vertex already exists
+            bool vertexFound = false;
+            for (int32_t k = 0; k < verticesData.size(); ++k)
             {
-                // Todo : only add vertex if not found
+                if (vertsAreEqual(vertexData.vx, verticesData[k].vx) &&
+                    vertsAreEqual(vertexData.vy, verticesData[k].vy) &&
+                    vertsAreEqual(vertexData.vz, verticesData[k].vz) &&
+                    vertsAreEqual(vertexData.tx, verticesData[k].tx) &&
+                    vertsAreEqual(vertexData.ty, verticesData[k].ty) &&
+                    vertsAreEqual(vertexData.nx, verticesData[k].nx) &&
+                    vertsAreEqual(vertexData.ny, verticesData[k].ny) &&
+                    vertsAreEqual(vertexData.nz, verticesData[k].nz))
+                {
+                    // Add existing vertex
+                    verticesData.push_back(VertexData());
+                    verticesData.back().copy = true;
+                    verticesData.back().index = verticesData[k].index;
+                    verticesData.back().vx = 0.0f;
+                    verticesData.back().vy = 0.0f;
+                    verticesData.back().vz = 0.0f;
+                    verticesData.back().tx = 0.0f;
+                    verticesData.back().ty = 0.0f;
+                    verticesData.back().nx = 0.0f;
+                    verticesData.back().ny = 0.0f;
+                    verticesData.back().nz = 0.0f;
+                    vertexFound = true;
+                    break;
+                }
             }
 
-            // Add new vertex
-            m_verts.push_back(vertex.x);
-            m_verts.push_back(vertex.y);
-            m_verts.push_back(vertex.z);
-            m_verts.push_back(texcoord.x);
-            m_verts.push_back(texcoord.y);
-            m_verts.push_back(normal.x);
-            m_verts.push_back(normal.y);
-            m_verts.push_back(normal.z);
-
-            // Add new index
-            m_indices.push_back(curIndex++);
+            if (!vertexFound)
+            {
+                // Add new vertex
+                verticesData.push_back(VertexData());
+                verticesData.back().copy = false;
+                verticesData.back().index = curIndex++;
+                verticesData.back().vx = vertexData.vx;
+                verticesData.back().vy = vertexData.vy;
+                verticesData.back().vz = vertexData.vz;
+                verticesData.back().tx = vertexData.tx;
+                verticesData.back().ty = vertexData.ty;
+                verticesData.back().nx = vertexData.nx;
+                verticesData.back().ny = vertexData.ny;
+                verticesData.back().nz = vertexData.nz;
+            }
         }
+    }
+
+    // Add final vertices and indices
+    for (int32_t k = 0; k < verticesData.size(); ++k)
+    {
+        if (!verticesData[k].copy)
+        {
+            // Add new vertex
+            m_verts.push_back(verticesData[k].vx);
+            m_verts.push_back(verticesData[k].vy);
+            m_verts.push_back(verticesData[k].vz);
+            m_verts.push_back(verticesData[k].tx);
+            m_verts.push_back(verticesData[k].ty);
+            m_verts.push_back(verticesData[k].nx);
+            m_verts.push_back(verticesData[k].ny);
+            m_verts.push_back(verticesData[k].nz);
+        }
+
+        // Add new index
+        m_indices.push_back(verticesData[k].index);
     }
 
     // Vertices and indices are successfully computed

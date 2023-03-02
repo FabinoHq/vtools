@@ -60,6 +60,12 @@
 
 
     ////////////////////////////////////////////////////////////////////////////
+    //  Float precision epsilon (vertices snap)                               //
+    ////////////////////////////////////////////////////////////////////////////
+    const float VToolsObjToVmshFloatEpsilon = 0.000001f;
+
+
+    ////////////////////////////////////////////////////////////////////////////
     //  ObjToken enumeration                                                  //
     ////////////////////////////////////////////////////////////////////////////
     enum ObjToken
@@ -116,6 +122,24 @@
 
 
     ////////////////////////////////////////////////////////////////////////////
+    //  VertexData data structure                                             //
+    ////////////////////////////////////////////////////////////////////////////
+    struct VertexData
+    {
+        bool copy;
+        int16_t index;
+        float vx;
+        float vy;
+        float vz;
+        float tx;
+        float ty;
+        float nx;
+        float ny;
+        float nz;
+    };
+
+
+    ////////////////////////////////////////////////////////////////////////////
     //  ObjToVmsh main class definition                                       //
     ////////////////////////////////////////////////////////////////////////////
     class ObjToVmsh
@@ -163,6 +187,16 @@
             //  return : True if vmsh file is successfully written            //
             ////////////////////////////////////////////////////////////////////
             bool write(const std::string& filepath);
+
+
+            ////////////////////////////////////////////////////////////////////
+            //  Compare two vertices floating points values                   //
+            //  return : True if values are nearly equal, false otherwise     //
+            ////////////////////////////////////////////////////////////////////
+            inline bool vertsAreEqual(float x, float y)
+            {
+                return (Math::abs(x - y) < VToolsObjToVmshFloatEpsilon);
+            }
 
 
         private:
