@@ -679,6 +679,13 @@ bool ObjToVmsh::compute()
         m_indices.push_back(verticesData[k].index);
     }
 
+    // Check indices count
+    if (m_indices.size() >= 65535)
+    {
+        // Too many indices
+        return false;
+    }
+
     // Vertices and indices are successfully computed
     return true;
 }
