@@ -74,9 +74,10 @@
         OBJTOKEN_VERTEX = 1,
         OBJTOKEN_TEXCOORD = 2,
         OBJTOKEN_NORMAL = 3,
-        OBJTOKEN_FACE_VERTEX = 4,
-        OBJTOKEN_FACE_TEXCOORD = 5,
-        OBJTOKEN_FACE_NORMAL = 6
+        OBJTOKEN_FACE = 4,
+        OBJTOKEN_FACE_VERTEX = 5,
+        OBJTOKEN_FACE_TEXCOORD = 6,
+        OBJTOKEN_FACE_NORMAL = 7
     };
 
 
@@ -216,6 +217,8 @@
             std::vector<Texcoord>   m_texcoords;        // Obj texcoords
             std::vector<Normal>     m_normals;          // Obj normals
             std::vector<Face>       m_faces;            // Obj faces
+            bool                    m_hasTexcoords;     // Obj has texcoords
+            bool                    m_hasNormals;       // Obj has normals
 
             std::vector<float>      m_verts;            // Vmsh vertices
             std::vector<uint16_t>   m_indices;          // Vmsh indices

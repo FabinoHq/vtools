@@ -45,7 +45,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 //  ObjToVmsh default constructor                                             //
 ////////////////////////////////////////////////////////////////////////////////
-ObjToVmsh::ObjToVmsh()
+ObjToVmsh::ObjToVmsh() :
+m_hasTexcoords(false),
+m_hasNormals(false)
 {
 
 }
@@ -128,6 +130,8 @@ bool ObjToVmsh::read(const std::string& filepath)
     m_texcoords.clear();
     m_normals.clear();
     m_faces.clear();
+    m_hasTexcoords = false;
+    m_hasNormals = false;
 
     // Read input obj file
     bool reading = true;
@@ -152,7 +156,13 @@ bool ObjToVmsh::read(const std::string& filepath)
         // Faces space separators
         if (ch == ' ')
         {
-            if ((curtok == OBJTOKEN_FACE_TEXCOORD) ||
+            if (curtok == OBJTOKEN_FACE)
+            {
+                curtok = OBJTOKEN_FACE_VERTEX;
+                continue;
+            }
+            if ((curtok == OBJTOKEN_FACE_VERTEX) ||
+                (curtok == OBJTOKEN_FACE_TEXCOORD) ||
                 (curtok == OBJTOKEN_FACE_NORMAL))
             {
                 curtok = OBJTOKEN_FACE_VERTEX;
@@ -184,7 +194,7 @@ bool ObjToVmsh::read(const std::string& filepath)
 
             // Face
             case 'f':
-                curtok = OBJTOKEN_FACE_VERTEX;
+                curtok = OBJTOKEN_FACE;
                 curindex = 0;
                 break;
 
@@ -338,6 +348,7 @@ bool ObjToVmsh::read(const std::string& filepath)
                                 // Invalid (only triangles or quads are valid)
                                 return false;
                         }
+                        m_hasTexcoords = true;
                         break;
 
                     // Face normal
@@ -363,6 +374,7 @@ bool ObjToVmsh::read(const std::string& filepath)
                                 // Invalid (only triangles or quads are valid)
                                 return false;
                         }
+                        m_hasNormals = true;
                         break;
 
                     // Unknown
@@ -379,6 +391,7 @@ bool ObjToVmsh::read(const std::string& filepath)
 
             // Unknown
             default:
+                std::getline(input, curstr);
                 curtok = OBJTOKEN_NONE;
                 break;
         }
@@ -516,44 +529,59 @@ bool ObjToVmsh::compute()
             }
 
             // Set texcoord data
-            if (texcoordIndex >= 0)
+            if (m_hasTexcoords)
             {
-                // Check vertex index
-                if (texcoordIndex >= m_texcoords.size())
+                if (texcoordIndex >= 0)
                 {
-                    // Invalid vertex index
+                    // Check vertex index
+                    if (texcoordIndex >= m_texcoords.size())
+                    {
+                        // Invalid vertex index
+                        return false;
+                    }
+                    vertexData.tx = m_texcoords[texcoordIndex].x;
+                    vertexData.ty = m_texcoords[texcoordIndex].y;
+                }
+                else
+                {
+                    // Todo : handle negative indices
                     return false;
                 }
-                vertexData.tx = m_texcoords[texcoordIndex].x;
-                vertexData.ty = m_texcoords[texcoordIndex].y;
-            }
-            else
-            {
-                // Todo : handle negative indices
-                return false;
             }
 
             // Set normal data
-            if (normalIndex >= 0)
+            if (m_hasNormals)
             {
-                // Check normal index
-                if (normalIndex >= m_normals.size())
+                if (normalIndex >= 0)
                 {
-                    // Invalid normal index
+                    // Check normal index
+                    if (normalIndex >= m_normals.size())
+                    {
+                        // Invalid normal index
+                        return false;
+                    }
+                    vertexData.nx = m_normals[normalIndex].x;
+                    vertexData.ny = m_normals[normalIndex].y;
+                    vertexData.nz = m_normals[normalIndex].z;
+                }
+                else
+                {
+                    // Todo : handle negative indices
                     return false;
                 }
-                vertexData.nx = m_normals[normalIndex].x;
-                vertexData.ny = m_normals[normalIndex].y;
-                vertexData.nz = m_normals[normalIndex].z;
-            }
-            else
-            {
-                // Todo : handle negative indices
-                return false;
             }
 
+            // Remove vertex negative zeros
+            if (vertexData.vx == -0.0f) { vertexData.vx = 0.0f; }
+            if (vertexData.vy == -0.0f) { vertexData.vy = 0.0f; }
+            if (vertexData.vz == -0.0f) { vertexData.vz = 0.0f; }
+
             // Reverse texcoord Y axis
-            vertexData.ty = 1.0f-vertexData.ty;
+            vertexData.ty = (1.0f-vertexData.ty);
+
+            // Remove texcoord negative zeros
+            if (vertexData.tx == -0.0f) { vertexData.tx = 0.0f; }
+            if (vertexData.ty == -0.0f) { vertexData.ty = 0.0f; }
 
             // Clamp texcoord
             if (vertexData.tx <= 0.0f) { vertexData.tx = 0.0f; }
@@ -568,6 +596,11 @@ bool ObjToVmsh::compute()
             vertexData.nx = normalVector.vec[0];
             vertexData.ny = normalVector.vec[1];
             vertexData.nz = normalVector.vec[2];
+
+            // Remove normal negative zeros
+            if (vertexData.nx == -0.0f) { vertexData.nx = 0.0f; }
+            if (vertexData.ny == -0.0f) { vertexData.ny = 0.0f; }
+            if (vertexData.nz == -0.0f) { vertexData.nz = 0.0f; }
 
             // Clamp normal
             if (vertexData.nx <= -1.0f) {vertexData.nx = -1.0f; }
