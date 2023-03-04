@@ -518,35 +518,49 @@ bool ObjToVmsh::compute()
                     // Invalid vertex index
                     return false;
                 }
-                vertexData.vx = m_vertices[vertexIndex].x;
-                vertexData.vy = m_vertices[vertexIndex].y;
-                vertexData.vz = m_vertices[vertexIndex].z;
             }
             else
             {
-                // Todo : handle negative indices
-                return false;
+                // Check vertex index
+                vertexIndex += (
+                    static_cast<int32_t>(m_vertices.size())+1
+                );
+                if (vertexIndex >= m_vertices.size())
+                {
+                    // Invalid vertex index
+                    return false;
+                }
             }
+            vertexData.vx = m_vertices[vertexIndex].x;
+            vertexData.vy = m_vertices[vertexIndex].y;
+            vertexData.vz = m_vertices[vertexIndex].z;
 
             // Set texcoord data
             if (m_hasTexcoords)
             {
                 if (texcoordIndex >= 0)
                 {
-                    // Check vertex index
+                    // Check texcoord index
                     if (texcoordIndex >= m_texcoords.size())
                     {
-                        // Invalid vertex index
+                        // Invalid texcoord index
                         return false;
                     }
-                    vertexData.tx = m_texcoords[texcoordIndex].x;
-                    vertexData.ty = m_texcoords[texcoordIndex].y;
                 }
                 else
                 {
-                    // Todo : handle negative indices
-                    return false;
+                    // Check texcoord index
+                    texcoordIndex += (
+                        static_cast<int32_t>(m_texcoords.size())+1
+                    );
+                    if (texcoordIndex >= m_texcoords.size())
+                    {
+                        // Invalid texcoord index
+                        return false;
+                    }
                 }
+                vertexData.tx = m_texcoords[texcoordIndex].x;
+                vertexData.ty = m_texcoords[texcoordIndex].y;
             }
 
             // Set normal data
@@ -560,15 +574,22 @@ bool ObjToVmsh::compute()
                         // Invalid normal index
                         return false;
                     }
-                    vertexData.nx = m_normals[normalIndex].x;
-                    vertexData.ny = m_normals[normalIndex].y;
-                    vertexData.nz = m_normals[normalIndex].z;
                 }
                 else
                 {
-                    // Todo : handle negative indices
-                    return false;
+                    // Check normal index
+                    normalIndex += (
+                        static_cast<int32_t>(m_normals.size())+1
+                    );
+                    if (normalIndex >= m_normals.size())
+                    {
+                        // Invalid normal index
+                        return false;
+                    }
                 }
+                vertexData.nx = m_normals[normalIndex].x;
+                vertexData.ny = m_normals[normalIndex].y;
+                vertexData.nz = m_normals[normalIndex].z;
             }
 
             // Remove vertex negative zeros
