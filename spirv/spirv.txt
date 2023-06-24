@@ -1,6 +1,6 @@
 D:\Dev\GitHub\vos\Renderer\Shaders\Sources\
 D:\Dev\GitHub\vos\Renderer\Shaders\
-14
+15
 2
 Default.vert
 Default.frag
@@ -79,6 +79,13 @@ PxText.h
 VOS_RENDERER_SHADERS_PXTEXT_HEADER
     //  Pixel text fragment shader                                            //
 PxTextFragmentShader
+1
+Button.frag
+Button.h
+//     Renderer/Shaders/Button.h : GUI Button shader                          //
+VOS_RENDERER_SHADERS_BUTTON_HEADER
+    //  Button fragment shader                                                //
+ButtonFragmentShader
 1
 Rectangle.frag
 Rectangle.h
