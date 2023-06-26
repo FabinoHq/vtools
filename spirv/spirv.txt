@@ -1,6 +1,6 @@
 D:\Dev\GitHub\vos\Renderer\Shaders\Sources\
 D:\Dev\GitHub\vos\Renderer\Shaders\
-15
+16
 2
 Default.vert
 Default.frag
@@ -86,6 +86,13 @@ Button.h
 VOS_RENDERER_SHADERS_BUTTON_HEADER
     //  Button fragment shader                                                //
 ButtonFragmentShader
+1
+ToggleButton.frag
+ToggleButton.h
+//     Renderer/Shaders/ToggleButton.h : GUI ToggleButton shader              //
+VOS_RENDERER_SHADERS_TOGGLEBUTTON_HEADER
+    //  Toggle button fragment shader                                         //
+ToggleButtonFragmentShader
 1
 Rectangle.frag
 Rectangle.h
