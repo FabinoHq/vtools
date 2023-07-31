@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Netcpy.cpp" />
+    <ClCompile Include="System\SysClock.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SysCPU.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SysSettings.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SysThread.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Win\SysMessage.cpp">
+      <Filter>System\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\Network.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\IPAddress.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\TCPSocket.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\UDPSocket.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Netcpy.h" />
+    <ClInclude Include="System\SysClock.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SysCPU.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SysCRC.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SysMessage.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SysMutex.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SysMutexLocker.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SysSettings.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SysSleep.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\System.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SysThread.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Win\SysCPU.h">
+      <Filter>System\Win</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Win\SysMessage.h">
+      <Filter>System\Win</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Network.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\IPAddress.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\TCPSocket.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\UDPSocket.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Math.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="System">
+      <UniqueIdentifier>{c9e960e5-c2b3-4b91-8081-e944490856a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Win">
+      <UniqueIdentifier>{b4b3544b-c538-49a1-b727-14aca8b7d7bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{ca6d8d56-2aee-4680-ac95-e30b591d6fee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{77e683e4-8691-4e10-a2cb-672a2eece60c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
