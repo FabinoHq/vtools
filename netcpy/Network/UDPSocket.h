@@ -106,15 +106,27 @@
 
 
             ////////////////////////////////////////////////////////////////////
+            //  Try to send data once over UDP                                //
+            ////////////////////////////////////////////////////////////////////
+            bool sendOnce(const char* data, size_t& size,
+                IPAddress& ipaddress, uint16_t port);
+
+            ////////////////////////////////////////////////////////////////////
             //  Send data over UDP                                            //
             ////////////////////////////////////////////////////////////////////
             bool sendData(const char* data, size_t size,
                 IPAddress& ipaddress, uint16_t port);
 
             ////////////////////////////////////////////////////////////////////
+            //  Try to receive data once over UDP                             //
+            ////////////////////////////////////////////////////////////////////
+            bool receiveOnce(char* data, size_t& size,
+                IPAddress& ipaddress, uint16_t port);
+
+            ////////////////////////////////////////////////////////////////////
             //  Receive data over UDP                                         //
             ////////////////////////////////////////////////////////////////////
-            bool receiveData(char* data, size_t& size,
+            bool receiveData(char* data, size_t size,
                 IPAddress& ipaddress, uint16_t port);
 
 

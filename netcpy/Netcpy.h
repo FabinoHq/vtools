@@ -204,19 +204,15 @@
         private:
             TCPSocket           m_localSock;            // Local TCP socket
             TCPSocket           m_distantSock;          // Distant TCP socket
-
             IPAddress           m_distantAddr;          // Distant address
             uint16_t            m_startingPort;         // Starting port
+            char*               m_buffer;               // Buffer
 
+            bool                m_sending;              // Send or receive
             std::string         m_fileName;             // File name
             size_t              m_fileSize;             // File size
             uint32_t            m_crc32;                // CRC 32
             uint32_t            m_adler32;              // Adler 32
-
-            char*               m_buffer;               // Buffer
-            size_t              m_bufSize;              // Buffer size
-
-            bool                m_sending;              // Send or receive
 
             SysClock            m_updateTime;           // Update time
             SysClock            m_totalTime;            // Total transfer time

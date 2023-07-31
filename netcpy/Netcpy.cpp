@@ -50,13 +50,12 @@ m_localSock(),
 m_distantSock(),
 m_distantAddr(),
 m_startingPort(0),
+m_buffer(0),
+m_sending(false),
 m_fileName(""),
 m_fileSize(0),
 m_crc32(0),
 m_adler32(0),
-m_buffer(0),
-m_bufSize(0),
-m_sending(false),
 m_updateTime(),
 m_totalTime(),
 m_currentTime(0.0),
@@ -788,6 +787,7 @@ bool Netcpy::transferFile(char* filepath)
     std::cout << "CRC32 : " << m_crc32 << '\n';
     std::cout << "Adler32 : " << m_adler32 << '\n';
     std::cout << "\n";
+    std::cout << std::flush;
 
     // Reset timers
     m_totalTime.reset();
@@ -844,6 +844,7 @@ bool Netcpy::transferFile(char* filepath)
 
         displayProgress(100.0, 0.0);
         std::cout << "\n";
+        std::cout << std::flush;
 
         // Send Ack
         preSend();
@@ -915,6 +916,7 @@ bool Netcpy::transferFile(char* filepath)
 
         displayProgress(100.0, 0.0);
         std::cout << "\n";
+        std::cout << std::flush;
 
         // Receive Ack
         if (!receive()) { close(); return false; }
@@ -994,34 +996,20 @@ bool Netcpy::receive()
 {
     // Receive data
     memset(m_buffer, 0, NETCPY_BUFFER_SIZE);
-    size_t recvLen = 0;
-    do
+    if (!m_distantSock.receiveData(m_buffer, NETCPY_BUFFER_SIZE))
     {
-        m_bufSize = (NETCPY_BUFFER_SIZE - recvLen);
-        if (!m_distantSock.receiveData(&m_buffer[recvLen], m_bufSize))
-        {
-            std::cout << "TCP Socket receive error\n";
-            return false;
-        }
-        recvLen += m_bufSize;
-    } while (recvLen < NETCPY_BUFFER_SIZE);
-    m_bufSize = recvLen;
-
-    // Check final buffer size
-    if (m_bufSize != NETCPY_BUFFER_SIZE)
-    {
-        std::cout << "Netcpy TCP receive size error\n";
-        std::cout << "Expected : " << NETCPY_BUFFER_SIZE <<
-            ", received : " << m_bufSize << '\n';
+        std::cout << "TCP Socket receive error\n";
         return false;
     }
 
-    // Data sucessfully received
+    // Check netcpy TCP header
     if (memcmp(m_buffer, NetcpyTcpHeader, NETCPY_TCP_HEADER_SIZE) != 0)
     {
         std::cout << "Netcpy TCP header error\n";
         return false;
     }
+
+    // Data sucessfully received
     return true;
 }
 
@@ -1031,25 +1019,9 @@ bool Netcpy::receive()
 bool Netcpy::receiveFilebuf(size_t bufSize)
 {
     // Receive data
-    size_t recvLen = 0;
-    do
+    if (!m_distantSock.receiveData(m_buffer, bufSize))
     {
-        m_bufSize = (bufSize - recvLen);
-        if (!m_distantSock.receiveData(&m_buffer[recvLen], m_bufSize))
-        {
-            std::cout << "TCP Socket receive error\n";
-            return false;
-        }
-        recvLen += m_bufSize;
-    } while (recvLen < bufSize);
-    m_bufSize = recvLen;
-
-    // Check final buffer size
-    if (m_bufSize != bufSize)
-    {
-        std::cout << "Netcpy TCP receive size error\n";
-        std::cout << "Expected : " << bufSize <<
-            ", received : " << m_bufSize << '\n';
+        std::cout << "TCP Socket receive error\n";
         return false;
     }
 
@@ -1103,4 +1075,5 @@ void Netcpy::displayProgress(double percents, double bitrate)
         std::cout << bitrate << " bits/s";
     }
     m_displayTime = 0.0;
+    std::cout << std::flush;
 }
