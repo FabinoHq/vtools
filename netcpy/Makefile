@@ -45,15 +45,15 @@ CC=g++ -std=c++17 -O3 -fno-exceptions -fno-rtti \
 CFLAGS=-W -Wall
 LDFLAGS=-pthread
 
-all: netcpy
+all: netcpy.out
 
-netcpy: main.o \
+netcpy.out: main.o \
 	Netcpy.o \
 	System/SysThread.o System/SysClock.o System/SysCPU.o \
 	System/Lin/SysMessage.o System/SysSettings.o \
 	Network/IPAddress.o Network/TCPSocket.o Network/UDPSocket.o
 
-	$(CC) -o netcpy \
+	$(CC) -o netcpy.out \
 	Netcpy.o \
 	System/SysThread.o System/SysClock.o System/SysCPU.o \
 	System/Lin/SysMessage.o System/SysSettings.o \
@@ -101,4 +101,4 @@ clean:
 	rm -rf Network/*.o
 
 mrproper: clean
-	rm -rf netcpy
+	rm -rf netcpy.out
