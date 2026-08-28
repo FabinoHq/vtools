@@ -1,6 +1,6 @@
 D:\Dev\GitHub\vos\Renderer\Shaders\Sources\
 D:\Dev\GitHub\vos\Renderer\Shaders\
-17
+18
 2
 Default.vert
 Default.frag
@@ -100,6 +100,13 @@ ProgressBar.h
 VOS_RENDERER_SHADERS_PROGRESSBAR_HEADER
     //  Progress bar fragment shader                                          //
 ProgressBarFragmentShader
+1
+Slider.frag
+Slider.h
+//     Renderer/Shaders/Slider.h : GUI Slider shader                          //
+VOS_RENDERER_SHADERS_SLIDER_HEADER
+    //  Slider fragment shader                                                //
+SliderFragmentShader
 1
 Rectangle.frag
 Rectangle.h
