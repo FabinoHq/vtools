@@ -40,7 +40,8 @@
 ::     make.bat : Windows make compilation file                               ::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-:: Delete build files
-rd /s /q x64
-rd /s /q objtovmsh
-rd /s /q .vs
+:: Run spirv
+spirv.exe
+
+:: System pause
+pause
